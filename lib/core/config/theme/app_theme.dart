@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:garaage/core/config/theme/app_colors.dart';
-import 'package:garaage/core/config/theme/app_text.dart';
+
+import 'app_colors.dart';
+import 'app_text.dart';
 
 class AppTheme {
   static final lightTheme = ThemeData(
