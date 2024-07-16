@@ -11,7 +11,7 @@ class AppTheme {
     fontFamily: 'Inter',
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        backgroundColor: AppColors.primary,
+        elevation: 0.0,
         textStyle: AppText.buttonText,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:garaage/core/config/theme/app_colors.dart';
 
 class AppText {
   // Heading
@@ -11,7 +12,7 @@ class AppText {
   // Body
   static const bodyXL = TextStyle(fontFamily: 'Inter', fontSize: 18, fontWeight: FontWeight.w400);
   static const bodyL = TextStyle(fontFamily: 'Inter', fontSize: 16, fontWeight: FontWeight.w400);
-  static const bodyM = TextStyle(fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w400);
+  static const bodyM = TextStyle(fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w400, color: AppColors.bodyText);
   static const bodyS = TextStyle(fontFamily: 'Inter', fontSize: 12, fontWeight: FontWeight.w400);
   static const bodyXS = TextStyle(fontFamily: 'Inter', fontSize: 10, fontWeight: FontWeight.w500);
 
