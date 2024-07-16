@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 import 'core/config/theme/app_theme.dart';
+import 'presentation/onboarding/pages/onboarding.dart';
 
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -34,18 +35,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       theme: AppTheme.lightTheme,
       debugShowCheckedModeBanner: false,
-      home: const Scaffold(
-        backgroundColor: Color.fromARGB(255, 246, 245, 245),
-        body: Center(
-          child: Text(
-            'Hello, World!',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-      ),
+      home: const OnboardingPage(),
     );
   }
 }
