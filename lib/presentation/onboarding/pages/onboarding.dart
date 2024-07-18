@@ -156,7 +156,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
   AnimatedContainer buildDot({required int index}) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
-      margin: const EdgeInsets.only(right: 8),
+      margin: const EdgeInsets.only(right: 6),
       height: 10,
       width: currSlide == index ? 30 : 10,
       decoration: BoxDecoration(
