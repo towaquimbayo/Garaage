@@ -1,6 +1,6 @@
 // How to use: 
-// - Image.asset(AppIcons.bold['arrow-right']);
-// - Image.asset(AppIcons.broken['arrow-right']);
+// - Image.asset(AppIcons.bold['arrow-right']!);
+// - Image.asset(AppIcons.broken['arrow-right']!);
 
 enum IconType { bold, broken }
   
