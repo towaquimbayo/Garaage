@@ -139,6 +139,20 @@ class _ChatbotState extends State<Chatbot> {
             ];
           });
         }
+      }, onError: (error) {
+        // Handle the error
+        if (error is GeminiException) {
+          if (error.statusCode == 404) {
+            // Handle 404 error specifically
+            print("Resource not found. Please check the URL and try again.");
+          } else {
+            // Handle other errors
+            print("An error occurred: ${error.message}");
+          }
+        } else {
+          // Handle other types of errors
+          print("An unexpected error occurred: $error");
+        }
       });
     } catch (e) {
       print(e);
@@ -154,9 +168,13 @@ class _ChatbotState extends State<Chatbot> {
       ChatMessage message = ChatMessage(
           user: currentUser,
           createdAt: DateTime.now(),
-          text: "Return the code in the image",
+          text: "Describe the image",
           medias: [
-            ChatMedia(url: file.path, fileName: "", type: MediaType.image)
+            ChatMedia(
+              url: file.path,
+              fileName: "",
+              type: MediaType.image,
+            )
           ]);
       _sendMessage(message);
     }
