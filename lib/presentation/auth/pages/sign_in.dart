@@ -131,11 +131,11 @@ class SignInPage extends StatelessWidget {
         TextButton(
           onPressed: () {
             Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => const RegisterPage(),
-            ),
-          );
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => const RegisterPage(),
+              ),
+            );
           },
           child: Text(
             'Register Now',
