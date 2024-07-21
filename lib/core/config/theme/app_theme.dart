@@ -6,6 +6,9 @@ import 'app_text.dart';
 class AppTheme {
   static final lightTheme = ThemeData(
     primaryColor: AppColors.primary,
+    colorScheme: const ColorScheme.light(
+      primary: AppColors.primary,
+    ),
     scaffoldBackgroundColor: AppColors.background,
     brightness: Brightness.light,
     fontFamily: 'Inter',
