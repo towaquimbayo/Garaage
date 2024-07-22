@@ -7,15 +7,25 @@ import '../../../core/config/assets/app_icons.dart';
 import '../../../core/config/assets/app_vectors.dart';
 import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_text.dart';
+import '../../../data/models/auth/create_user_req.dart';
+import '../../../domain/usecases/auth/register.dart';
+import '../../../service_locator.dart';
+import '../../connect/pages/connect.dart';
 import 'sign_in.dart';
 
 class RegisterPage extends StatelessWidget {
-  const RegisterPage({super.key});
+  RegisterPage({super.key});
+
+  final TextEditingController _firstName = TextEditingController();
+  final TextEditingController _lastName = TextEditingController();
+  final TextEditingController _email = TextEditingController();
+  final TextEditingController _password = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar(
+        leading: true,
         title: SvgPicture.asset(
           AppVectors.logo,
           colorFilter: const ColorFilter.mode(
@@ -44,12 +54,31 @@ class RegisterPage extends StatelessWidget {
             MyButton(
               type: 'primary',
               text: 'Register',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => const SignInPage(),
+              onPressed: () async {
+                var result = await sl<RegisterUseCase>().call(
+                  params: CreateUserReq(
+                    firstName: _firstName.text.toString(),
+                    lastName: _lastName.text.toString(),
+                    email: _email.text.toString(),
+                    password: _password.text.toString(),
                   ),
+                );
+                result.fold(
+                  (l) {
+                    var snackBar = SnackBar(
+                      content: Text(l),
+                      behavior: SnackBarBehavior.floating,
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  },
+                  (r) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => const ConnectPage(),
+                      ),
+                    );
+                  },
                 );
               },
             ),
@@ -95,6 +124,7 @@ class RegisterPage extends StatelessWidget {
                 ),
               ),
               TextField(
+                controller: _firstName,
                 decoration: const InputDecoration(
                   hintText: 'John',
                 ).applyDefaults(
@@ -117,6 +147,7 @@ class RegisterPage extends StatelessWidget {
                 ),
               ),
               TextField(
+                controller: _lastName,
                 decoration: const InputDecoration(
                   hintText: 'Doe',
                 ).applyDefaults(
@@ -142,6 +173,7 @@ class RegisterPage extends StatelessWidget {
           ),
         ),
         TextField(
+          controller: _email,
           decoration: const InputDecoration(
             hintText: 'name@email.com',
           ).applyDefaults(
@@ -164,16 +196,9 @@ class RegisterPage extends StatelessWidget {
           ),
         ),
         TextField(
+          controller: _password,
           decoration: const InputDecoration(
             hintText: 'Create a password',
-          ).applyDefaults(
-            Theme.of(context).inputDecorationTheme,
-          ),
-        ),
-        const SizedBox(height: 16),
-        TextField(
-          decoration: const InputDecoration(
-            hintText: 'Confirm password',
           ).applyDefaults(
             Theme.of(context).inputDecorationTheme,
           ),
@@ -188,7 +213,7 @@ class RegisterPage extends StatelessWidget {
         Transform.scale(
           scale: 1.5,
           child: Checkbox(
-            value: false,
+            value: true,
             side: const BorderSide(color: AppColors.lightGrayDark),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(6),
@@ -247,7 +272,7 @@ class RegisterPage extends StatelessWidget {
             Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (BuildContext context) => const SignInPage(),
+              builder: (BuildContext context) => SignInPage(),
             ),
           );
           },
