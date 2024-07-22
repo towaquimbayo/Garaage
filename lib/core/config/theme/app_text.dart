@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:garaage/core/config/theme/app_colors.dart';
+
+import 'app_colors.dart';
 
 class AppText {
   // Heading

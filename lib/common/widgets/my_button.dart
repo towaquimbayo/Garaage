@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:garaage/core/config/theme/app_colors.dart';
+
+import '../../core/config/theme/app_colors.dart';
 
 class MyButton extends StatelessWidget {
   final VoidCallback onPressed;
