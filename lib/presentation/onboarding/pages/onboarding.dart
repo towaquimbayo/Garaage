@@ -135,7 +135,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (BuildContext context) => const SignInPage(),
+                                builder: (BuildContext context) => SignInPage(),
                               ),
                             );
                           },

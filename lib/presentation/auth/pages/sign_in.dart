@@ -7,16 +7,23 @@ import '../../../core/config/assets/app_icons.dart';
 import '../../../core/config/assets/app_vectors.dart';
 import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_text.dart';
-import '../../connect/pages/connect.dart';
+import '../../../data/models/auth/sign_in_user_req.dart';
+import '../../../domain/usecases/auth/sign_in.dart';
+import '../../../service_locator.dart';
+import '../../home/pages/home.dart';
 import 'register.dart';
 
 class SignInPage extends StatelessWidget {
-  const SignInPage({super.key});
+  SignInPage({super.key});
+  
+  final TextEditingController _email = TextEditingController();
+  final TextEditingController _password = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar(
+        leading: true,
         title: SvgPicture.asset(
           AppVectors.logo,
           colorFilter: const ColorFilter.mode(
@@ -41,12 +48,29 @@ class SignInPage extends StatelessWidget {
             MyButton(
               type: 'primary',
               text: 'Sign In',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => const ConnectPage(),
+              onPressed: () async {
+                var result = await sl<SignInUseCase>().call(
+                  params: SignInUserReq(
+                    email: _email.text.toString(),
+                    password: _password.text.toString(),
                   ),
+                );
+                result.fold(
+                  (l) {
+                    var snackBar = SnackBar(
+                      content: Text(l),
+                      behavior: SnackBarBehavior.floating,
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  },
+                  (r) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => const HomePage(),
+                      ),
+                    );
+                  },
                 );
               },
             ),
@@ -88,6 +112,7 @@ class SignInPage extends StatelessWidget {
           ),
         ),
         TextField(
+          controller: _email,
           decoration: const InputDecoration(
             hintText: 'name@email.com',
           ).applyDefaults(
@@ -110,6 +135,7 @@ class SignInPage extends StatelessWidget {
           ),
         ),
         TextField(
+          controller: _password,
           decoration: const InputDecoration(
             hintText: 'Password',
           ).applyDefaults(
@@ -133,7 +159,7 @@ class SignInPage extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (BuildContext context) => const RegisterPage(),
+                builder: (BuildContext context) => RegisterPage(),
               ),
             );
           },
