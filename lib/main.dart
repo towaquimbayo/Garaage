@@ -10,6 +10,7 @@ import 'core/config/theme/app_theme.dart';
 import 'firebase_options.dart';
 import 'presentation/onboarding/pages/onboarding.dart';
 import 'presentation/splash/bloc/splash_cubit.dart';
+import 'service_locator.dart';
 
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -24,6 +25,8 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  await initializeDependencies();
 
   runApp(const MyApp());
 }
