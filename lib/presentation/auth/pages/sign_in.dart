@@ -15,7 +15,7 @@ import 'register.dart';
 
 class SignInPage extends StatelessWidget {
   SignInPage({super.key});
-  
+
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
 
@@ -23,16 +23,15 @@ class SignInPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar(
-        leading: true,
-        title: SvgPicture.asset(
-          AppVectors.logo,
-          colorFilter: const ColorFilter.mode(
-            AppColors.primary,
-            BlendMode.srcIn,
-          ),
-          height: 24,
-        )
-      ),
+          leading: true,
+          title: SvgPicture.asset(
+            AppVectors.logo,
+            colorFilter: const ColorFilter.mode(
+              AppColors.primary,
+              BlendMode.srcIn,
+            ),
+            height: 24,
+          )),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
@@ -171,7 +170,7 @@ class SignInPage extends StatelessWidget {
       ],
     );
   }
-  
+
   Widget _withGoogle() {
     return Column(
       children: [
