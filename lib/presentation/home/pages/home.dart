@@ -26,11 +26,11 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar(
+        actions: true,
         title: Text(
           'Welcome $username',
           style: AppText.pageTitleText.copyWith(color: AppColors.headingText),
         ),
-        actions: true,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 15),
