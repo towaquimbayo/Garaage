@@ -3,7 +3,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../core/config/theme/app_colors.dart';
 import '../../core/config/assets/app_icons.dart';
+import '../../core/error/error_handler.dart';
+import '../../domain/usecases/auth/sign_out.dart';
+import '../../presentation/onboarding/pages/onboarding.dart';
 import '../../presentation/profile/pages/profile.dart';
+import '../../service_locator.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? title;
@@ -91,7 +95,16 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                             ),
                           ),
                         ),
-                        onPressed: () {},
+                        onPressed: () async {
+                          var result = await sl<SignOutUseCase>().call();
+                          result.fold(
+                            (l) => ErrorHandler.handleError(context, l),
+                            (r) => Navigator.of(context).pushNamedAndRemoveUntil(
+                              OnboardingPage.routeName, 
+                              (route) => false
+                            ),
+                          );
+                        },
                       ),
                     ]
                   : [],

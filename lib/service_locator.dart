@@ -6,6 +6,7 @@ import 'domain/repositories/auth.dart';
 import 'domain/usecases/auth/register.dart';
 import 'domain/usecases/auth/sign_in.dart';
 import 'domain/usecases/auth/sign_in_with_google.dart';
+import 'domain/usecases/auth/sign_out.dart';
 
 final sl = GetIt.instance;
 
@@ -15,4 +16,5 @@ Future<void> initializeDependencies() async {
   sl.registerSingleton<RegisterUseCase>(RegisterUseCase());
   sl.registerSingleton<SignInUseCase>(SignInUseCase());
   sl.registerSingleton<SignInWithGoogleUseCase>(SignInWithGoogleUseCase());
+  sl.registerSingleton<SignOutUseCase>(SignOutUseCase());
 }

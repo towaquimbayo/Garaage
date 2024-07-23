@@ -11,6 +11,7 @@ abstract class AuthFirebaseService {
   Future<Either> signIn(SignInUserReq signInUserReq);
   Future<Either> register(CreateUserReq createUserReq);
   Future<Either> signInWithGoogle();
+  Future<Either> signOut();
 }
 
 class AuthFirebaseServiceImpl implements AuthFirebaseService {
@@ -82,11 +83,7 @@ class AuthFirebaseServiceImpl implements AuthFirebaseService {
   @override
   Future<Either> signInWithGoogle() async {
     try {
-      final GoogleSignIn googleSignIn = GoogleSignIn();
-
-      await googleSignIn.signOut();
-
-      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
       if (googleUser == null) throw FirebaseAuthException(code: 'google-sign-in-failed');
 
       final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
@@ -119,6 +116,18 @@ class AuthFirebaseServiceImpl implements AuthFirebaseService {
       }
       
       return Left(ServerFailure(type, message));
+    }
+  }
+
+  @override
+  Future<Either> signOut() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      await GoogleSignIn().signOut();
+
+      return const Right('User signed out successfully.');
+    } catch (e) {
+      return Left(ServerFailure('error', 'An error occurred while signing out.'));
     }
   }
 }

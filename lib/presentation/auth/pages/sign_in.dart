@@ -63,7 +63,10 @@ class SignInPage extends StatelessWidget {
                 result.fold(
                   (l) => ErrorHandler.handleError(context, l),
                   (r) {
-                    Navigator.of(context).pushNamed(NavigationPage.routeName);
+                    Navigator.of(context).pushNamedAndRemoveUntil(
+                      NavigationPage.routeName,
+                      (route) => false,
+                    );
                   },
                 );
               },
@@ -194,7 +197,10 @@ class SignInPage extends StatelessWidget {
             result.fold(
               (l) => ErrorHandler.handleError(context, l),
               (r) {
-                Navigator.of(context).pushNamed(NavigationPage.routeName);
+                Navigator.of(context).pushNamedAndRemoveUntil(
+                  NavigationPage.routeName,
+                  (route) => false,
+                );
               },
             );
           },
