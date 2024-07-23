@@ -109,8 +109,6 @@ class AuthFirebaseServiceImpl implements AuthFirebaseService {
 
       return const Right('Signed in with Google successfully');
     } on FirebaseAuthException catch (e) {
-      print(e);
-      
       String type = 'error';
       String message = '';
 
