@@ -82,8 +82,12 @@ class AuthFirebaseServiceImpl implements AuthFirebaseService {
   @override
   Future<Either> signInWithGoogle() async {
     try {
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-      if (googleUser == null) throw 'Google sign in cancelled';
+      final GoogleSignIn googleSignIn = GoogleSignIn();
+
+      await googleSignIn.signOut();
+
+      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+      if (googleUser == null) throw FirebaseAuthException(code: 'google-sign-in-failed');
 
       final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
       final credential = GoogleAuthProvider.credential(
@@ -104,9 +108,18 @@ class AuthFirebaseServiceImpl implements AuthFirebaseService {
       }
 
       return const Right('Signed in with Google successfully');
-    } catch (e) {
+    } on FirebaseAuthException catch (e) {
+      print(e);
+      
       String type = 'error';
-      String message = 'Error signing in with Google: ${e.toString()}';
+      String message = '';
+
+      if (e.code == 'network-request-failed') {
+        message = 'No internet connection.';
+      } else if (e.code == 'google-sign-in-failed') {
+        message = 'Google sign in was cancelled.';
+      }
+      
       return Left(ServerFailure(type, message));
     }
   }
