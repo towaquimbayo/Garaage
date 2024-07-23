@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../../core/config/assets/app_images.dart';
 import '../../../common/widgets/my_app_bar.dart';
-import '../../../core/config/assets/app_vectors.dart';
 import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_text.dart';
 
@@ -26,8 +25,8 @@ class _HomePageState extends State<HomePage> {
   Map<String, dynamic> vehicle = {
     'name': 'Honda Civic',
     'description': '2021 Sport Hybrid Edition',
-    'image': SvgPicture.asset(
-      AppVectors.hondaCivic,
+    'image': Image.asset(
+      AppImages.hondaCivic,
       fit: BoxFit.contain,
       height: 70,
     ),
