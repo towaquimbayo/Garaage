@@ -10,6 +10,7 @@ import 'core/config/theme/app_theme.dart';
 import 'firebase_options.dart';
 import 'presentation/onboarding/pages/onboarding.dart';
 import 'presentation/splash/bloc/splash_cubit.dart';
+import 'routes.dart';
 import 'service_locator.dart';
 
 Future<void> main() async {
@@ -47,7 +48,8 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
           theme: AppTheme.lightTheme,
           debugShowCheckedModeBanner: false,
-          home: const OnboardingPage(),
+          initialRoute: OnboardingPage.routeName,
+          routes: routes,
         ),
       ),
     );

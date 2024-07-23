@@ -9,6 +9,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? title;
   final bool? leading;
   final bool? actions;
+
   const MyAppBar({
     super.key,
     this.title,
@@ -65,11 +66,9 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                     ),
                   ),
                   onPressed: () {
-                    Navigator.push(
+                    Navigator.pushNamed(
                       context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => const ProfilePage(),
-                      ),
+                      ProfilePage.routeName,
                     );
                   },
                 ),

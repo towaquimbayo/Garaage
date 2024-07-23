@@ -10,6 +10,8 @@ import '../widgets/onboarding_content.dart';
 
 
 class OnboardingPage extends StatefulWidget {
+  static String routeName = '/onboarding';
+  
   const OnboardingPage({super.key});
 
   @override
@@ -117,11 +119,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         child: MyButton(
                           type: "primary",
                           onPressed: () {
-                            Navigator.push(
+                            Navigator.pushNamed(
                               context,
-                              MaterialPageRoute(
-                                builder: (BuildContext context) => RegisterPage(),
-                              ),
+                              RegisterPage.routeName, 
                             );
                           }, 
                           text: "Register",
@@ -132,11 +132,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
                         child: MyButton(
                           type: "other",
                           onPressed: () {
-                            Navigator.push(
+                            Navigator.pushNamed(
                               context,
-                              MaterialPageRoute(
-                                builder: (BuildContext context) => SignInPage(),
-                              ),
+                              SignInPage.routeName,
                             );
                           },
                           text: "Sign In",

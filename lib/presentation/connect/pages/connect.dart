@@ -5,6 +5,8 @@ import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_text.dart';
 
 class ConnectPage extends StatelessWidget {
+  static String routeName = '/connect';
+  
   const ConnectPage({super.key});
 
   @override

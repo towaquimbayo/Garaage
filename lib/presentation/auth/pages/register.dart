@@ -15,6 +15,8 @@ import '../../connect/pages/connect.dart';
 import 'sign_in.dart';
 
 class RegisterPage extends StatelessWidget {
+  static String routeName =  '/register';
+  
   RegisterPage({super.key});
 
   final TextEditingController _firstName = TextEditingController();
@@ -86,11 +88,9 @@ class RegisterPage extends StatelessWidget {
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   },
                   (r) {
-                    Navigator.push(
+                    Navigator.pushNamed(
                       context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => const ConnectPage(),
-                      ),
+                      ConnectPage.routeName,
                     );
                   },
                 );
@@ -306,12 +306,10 @@ class RegisterPage extends StatelessWidget {
         ),
         TextButton(
           onPressed: () {
-            Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => SignInPage(),
-            ),
-          );
+            Navigator.pushNamed(
+              context,
+              SignInPage.routeName,
+            );
           },
           child: Text(
             'Sign In',
@@ -345,11 +343,9 @@ class RegisterPage extends StatelessWidget {
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
               },
               (r) {
-                Navigator.push(
+                Navigator.pushNamed(
                   context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => const ConnectPage(),
-                  ),
+                  ConnectPage.routeName,
                 );
               },
             );

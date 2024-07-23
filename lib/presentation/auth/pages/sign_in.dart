@@ -11,10 +11,12 @@ import '../../../data/models/auth/sign_in_user_req.dart';
 import '../../../domain/usecases/auth/sign_in.dart';
 import '../../../domain/usecases/auth/sign_in_with_google.dart';
 import '../../../service_locator.dart';
-import '../../home/pages/home.dart';
+import '../../navigation/pages/navigation.dart';
 import 'register.dart';
 
 class SignInPage extends StatelessWidget {
+  static String routeName = '/sign-in';
+  
   SignInPage({super.key});
 
   final TextEditingController _email = TextEditingController();
@@ -66,11 +68,9 @@ class SignInPage extends StatelessWidget {
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   },
                   (r) {
-                    Navigator.push(
+                    Navigator.pushNamed(
                       context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) => const HomePage(),
-                      ),
+                      NavigationPage.routeName,
                     );
                   },
                 );
@@ -176,11 +176,9 @@ class SignInPage extends StatelessWidget {
         ),
         TextButton(
           onPressed: () {
-            Navigator.push(
+            Navigator.pushNamed(
               context,
-              MaterialPageRoute(
-                builder: (BuildContext context) => RegisterPage(),
-              ),
+              RegisterPage.routeName,
             );
           },
           child: Text(
@@ -215,11 +213,9 @@ class SignInPage extends StatelessWidget {
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
               },
               (r) {
-                Navigator.push(
+                Navigator.pushNamed(
                   context,
-                  MaterialPageRoute(
-                    builder: (BuildContext context) => const HomePage(),
-                  ),
+                  NavigationPage.routeName,
                 );
               },
             );
