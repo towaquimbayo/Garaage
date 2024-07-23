@@ -86,6 +86,7 @@ class AuthFirebaseServiceImpl implements AuthFirebaseService {
           'firstName': googleUser.displayName?.split(' ').first,
           'lastName': googleUser.displayName?.split(' ').last,
           'email': googleUser.email,
+          'imageUrl': googleUser.photoUrl,
         });
       }
 
