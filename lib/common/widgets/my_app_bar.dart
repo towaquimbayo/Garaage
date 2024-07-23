@@ -9,12 +9,14 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? title;
   final bool? leading;
   final bool? actions;
+  final Color? backgroundColor;
 
   const MyAppBar({
     super.key,
     this.title,
     this.leading,
     this.actions,
+    this.backgroundColor = AppColors.background,
   });
 
   @override
@@ -22,8 +24,8 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: AppBar(
-        backgroundColor: AppColors.background,
-        surfaceTintColor: AppColors.background,
+        backgroundColor: backgroundColor,
+        surfaceTintColor: backgroundColor,
         elevation: 0,
         title: title ?? const Text(''),
         centerTitle: true,
