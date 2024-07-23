@@ -14,6 +14,7 @@ class ProfilePage extends StatelessWidget {
     return Scaffold(
       appBar: MyAppBar(
         leading: true,
+        logout: true,
         backgroundColor: AppColors.surface,
         title: Text(
           'Profile',
