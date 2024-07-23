@@ -31,10 +31,8 @@ class NavigationPage extends StatelessWidget {
         return const HomePage();
       case NavBarItem.diagnostics:
         return const DiagnosticsPage();
-      case NavBarItem.chatbot:
-        return const ChatbotPage();
-      case NavBarItem.arIdentify:
-        return const ARIdentifyPage();
+      default:
+        return const HomePage();
     }
   }
 }

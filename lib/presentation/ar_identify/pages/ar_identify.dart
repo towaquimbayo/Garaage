@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../common/widgets/my_app_bar.dart';
 
 class ARIdentifyPage extends StatelessWidget {
+  static String routeName = '/ar_identify';
+
   const ARIdentifyPage({super.key});
 
   @override

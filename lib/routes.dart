@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'presentation/ar_identify/pages/ar_identify.dart';
 import 'presentation/auth/pages/register.dart';
 import 'presentation/auth/pages/sign_in.dart';
+import 'presentation/chatbot/pages/chatbot.dart';
 import 'presentation/connect/pages/connect.dart';
 import 'presentation/navigation/pages/navigation.dart';
 import 'presentation/onboarding/pages/onboarding.dart';
@@ -14,4 +16,6 @@ final Map<String, WidgetBuilder> routes = {
   ConnectPage.routeName: (context) => const ConnectPage(),
   NavigationPage.routeName: (context) => const NavigationPage(),
   ProfilePage.routeName: (context) => const ProfilePage(),
+  ChatbotPage.routeName: (context) => const ChatbotPage(),
+  ARIdentifyPage.routeName: (context) => const ARIdentifyPage(),
 };

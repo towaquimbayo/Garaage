@@ -4,6 +4,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../core/config/assets/app_icons.dart';
 import '../../core/config/theme/app_colors.dart';
+import '../../presentation/ar_identify/pages/ar_identify.dart';
+import '../../presentation/chatbot/pages/chatbot.dart';
 import '../../presentation/navigation/bloc/navigation_cubit.dart';
 
 class MyBottomNavBar extends StatelessWidget {
@@ -140,10 +142,10 @@ class MyBottomNavBar extends StatelessWidget {
         BlocProvider.of<NavigationCubit>(context).getNavBarItem(NavBarItem.diagnostics);
         break;
       case 2:
-        BlocProvider.of<NavigationCubit>(context).getNavBarItem(NavBarItem.chatbot);
+        Navigator.of(context).pushNamed(ChatbotPage.routeName);
         break;
       case 3:
-        BlocProvider.of<NavigationCubit>(context).getNavBarItem(NavBarItem.arIdentify);
+        Navigator.of(context).pushNamed(ARIdentifyPage.routeName);
         break;
     }
   }
