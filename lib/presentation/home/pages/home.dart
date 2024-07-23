@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -6,12 +8,22 @@ import '../../../core/config/assets/app_vectors.dart';
 import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_text.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  User? user;
+  String? uid;
+  String firstname = '';
+
   // @TODO: Replace with DB / Bloc data
-  static const username = 'USER';
-  static Map<String, dynamic> vehicle = {
+  Map<String, dynamic> vehicle = {
     'name': 'Honda Civic',
     'description': '2021 Sport Hybrid Edition',
     'image': SvgPicture.asset(
@@ -23,12 +35,40 @@ class HomePage extends StatelessWidget {
   };
 
   @override
+  void initState() {
+    super.initState();
+    user = _auth.currentUser;
+    uid = user?.uid;
+    if (uid != null) _getUserData();
+  }
+
+  // Get user data from Firestore
+  void _getUserData() async {
+    try {
+      // @TODO: Replace with actual document ID
+      DocumentSnapshot userDoc =
+          await _db.collection('Users').doc('kXuoDoi8vO0jLUBOMhfO').get();
+      if (userDoc.exists) {
+        Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+        setState(() {
+          print("Firestore UserData: $userData\n");
+          firstname = userData['firstName'] as String;
+        });
+      } else {
+        print('User Document does not exist');
+      }
+    } catch (e) {
+      print('Error getting user data from Firestore: $e');
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar(
         actions: true,
         title: Text(
-          'Welcome $username',
+          'Welcome $firstname',
           style: AppText.pageTitleText.copyWith(color: AppColors.headingText),
         ),
       ),
