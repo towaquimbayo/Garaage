@@ -21,7 +21,9 @@ class RegisterPage extends StatelessWidget {
   final TextEditingController _lastName = TextEditingController();
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
+
   final ValueNotifier<bool> _passwordVisible = ValueNotifier<bool>(false);
+  final ValueNotifier<bool> _termsAccepted = ValueNotifier<bool>(false);
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +59,16 @@ class RegisterPage extends StatelessWidget {
               type: 'primary',
               text: 'Register',
               onPressed: () async {
+                if (!_termsAccepted.value) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Please accept the terms and conditions.'),
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                  return;
+                }
+                
                 var result = await sl<RegisterUseCase>().call(
                   params: CreateUserReq(
                     firstName: _firstName.text.toString(),
@@ -228,54 +240,59 @@ class RegisterPage extends StatelessWidget {
   }
 
   Widget _acknowledgeTerms() {
-    return Row(
-      children: [
-        Transform.scale(
-          scale: 1.5,
-          child: Checkbox(
-            value: true,
-            side: const BorderSide(color: AppColors.lightGrayDark),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(6),
+    return ValueListenableBuilder<bool>(
+      valueListenable: _termsAccepted,
+      builder: (context, isAccepted, child) {
+        return Row(
+          children: [
+            Transform.scale(
+              scale: 1.5,
+              child: Checkbox(
+                value: isAccepted,
+                side: const BorderSide(color: AppColors.lightGrayDark),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                onChanged: (value) {
+                  _termsAccepted.value = value ?? false;
+                },
+                materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                visualDensity: VisualDensity.compact,
+              ),
             ),
-            onChanged: (value) {
-              
-            },
-            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            visualDensity: VisualDensity.compact,
-          ),
-        ),
-        const SizedBox(width: 8),
-        Flexible(
-          child: Text.rich(
-            TextSpan(
-              children: [
+            const SizedBox(width: 8),
+            Flexible(
+              child: Text.rich(
                 TextSpan(
-                  text: 'I\'ve read and agree with the ',
-                  style: AppText.bodyS.copyWith(color: AppColors.darkGrayLight),
+                  children: [
+                    TextSpan(
+                      text: 'I\'ve read and agree with the ',
+                      style: AppText.bodyS.copyWith(color: AppColors.darkGrayLight),
+                    ),
+                    TextSpan(
+                      text: 'Terms and Conditions',
+                      style: AppText.actionM.copyWith(color: AppColors.primary),
+                    ),
+                    TextSpan(
+                      text: ' and the ',
+                      style: AppText.bodyS.copyWith(color: AppColors.darkGrayLight),
+                    ),
+                    TextSpan(
+                      text: 'Privacy Policy',
+                      style: AppText.actionM.copyWith(color: AppColors.primary),
+                    ),
+                    TextSpan(
+                      text: '.',
+                      style: AppText.bodyS.copyWith(color: AppColors.darkGrayLight),
+                    ),
+                  ],
                 ),
-                TextSpan(
-                  text: 'Terms and Conditions',
-                  style: AppText.actionM.copyWith(color: AppColors.primary),
-                ),
-                TextSpan(
-                  text: ' and the ',
-                  style: AppText.bodyS.copyWith(color: AppColors.darkGrayLight),
-                ),
-                TextSpan(
-                  text: 'Privacy Policy',
-                  style: AppText.actionM.copyWith(color: AppColors.primary),
-                ),
-                TextSpan(
-                  text: '.',
-                  style: AppText.bodyS.copyWith(color: AppColors.darkGrayLight),
-                ),
-              ],
+                softWrap: true,
+              ),
             ),
-            softWrap: true,
-          ),
-        ),
-      ],
+          ],
+        );
+      }
     );
   }
 
