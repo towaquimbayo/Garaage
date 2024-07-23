@@ -8,6 +8,7 @@ import 'package:path_provider/path_provider.dart';
 
 import 'core/config/theme/app_theme.dart';
 import 'firebase_options.dart';
+import 'presentation/navigation/bloc/navigation_cubit.dart';
 import 'presentation/onboarding/pages/onboarding.dart';
 import 'presentation/splash/bloc/splash_cubit.dart';
 import 'routes.dart';
@@ -37,8 +38,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (BuildContext context) => SplashCubit()..hideSplash(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<SplashCubit>(
+          create: (BuildContext context) => SplashCubit()..hideSplash(),
+        ),
+        BlocProvider<NavigationCubit>(
+          create: (BuildContext context) => NavigationCubit(),
+        ),
+      ],
       child: BlocListener<SplashCubit, bool>(
         listener: (BuildContext context, showSplash) {
           if (!showSplash) {
