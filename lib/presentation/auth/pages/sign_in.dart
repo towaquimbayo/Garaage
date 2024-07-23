@@ -19,6 +19,7 @@ class SignInPage extends StatelessWidget {
 
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
+  final ValueNotifier<bool> _passwordVisible = ValueNotifier<bool>(false);
 
   @override
   Widget build(BuildContext context) {
@@ -135,13 +136,31 @@ class SignInPage extends StatelessWidget {
             style: AppText.headH5.copyWith(color: AppColors.headingText),
           ),
         ),
-        TextField(
-          controller: _password,
-          decoration: const InputDecoration(
-            hintText: 'Password',
-          ).applyDefaults(
-            Theme.of(context).inputDecorationTheme,
-          ),
+        ValueListenableBuilder<bool>(
+          valueListenable: _passwordVisible,
+          builder: (context, isVisible, child) {
+            return TextField(
+              controller: _password,
+              obscureText: !isVisible,
+              decoration: InputDecoration(
+                hintText: 'Password',
+                suffixIcon: IconButton(
+                  icon: SvgPicture.asset(
+                    AppIcons.broken[isVisible ? 'eye' : 'eye-slash']!,
+                    colorFilter: const ColorFilter.mode(
+                      AppColors.placeholderText,
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                  onPressed: () {
+                    _passwordVisible.value = !isVisible;
+                  }, 
+                )
+              ).applyDefaults(
+                Theme.of(context).inputDecorationTheme,
+              ),
+            );
+          }
         ),
       ],
     );

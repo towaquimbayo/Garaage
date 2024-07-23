@@ -21,6 +21,7 @@ class RegisterPage extends StatelessWidget {
   final TextEditingController _lastName = TextEditingController();
   final TextEditingController _email = TextEditingController();
   final TextEditingController _password = TextEditingController();
+  final ValueNotifier<bool> _passwordVisible = ValueNotifier<bool>(false);
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +49,7 @@ class RegisterPage extends StatelessWidget {
             const SizedBox(height: 16),
             _emailField(context),
             const SizedBox(height: 16),
-            _passwordFields(context),
+            _passwordField(context),
             const SizedBox(height: 24),
             _acknowledgeTerms(),
             const SizedBox(height: 24),
@@ -185,7 +186,7 @@ class RegisterPage extends StatelessWidget {
     );
   }
 
-  Widget _passwordFields(BuildContext context) {
+  Widget _passwordField(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -196,13 +197,31 @@ class RegisterPage extends StatelessWidget {
             style: AppText.headH5.copyWith(color: AppColors.headingText),
           ),
         ),
-        TextField(
-          controller: _password,
-          decoration: const InputDecoration(
-            hintText: 'Create a password',
-          ).applyDefaults(
-            Theme.of(context).inputDecorationTheme,
-          ),
+        ValueListenableBuilder<bool>(
+          valueListenable: _passwordVisible,
+          builder: (context, isVisible, child) {
+            return TextField(
+              controller: _password,
+              obscureText: !isVisible,
+              decoration: InputDecoration(
+                hintText: 'Password',
+                suffixIcon: IconButton(
+                  icon: SvgPicture.asset(
+                    AppIcons.broken[isVisible ? 'eye' : 'eye-slash']!,
+                    colorFilter: const ColorFilter.mode(
+                      AppColors.placeholderText,
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                  onPressed: () {
+                    _passwordVisible.value = !isVisible;
+                  }, 
+                )
+              ).applyDefaults(
+                Theme.of(context).inputDecorationTheme,
+              ),
+            );
+          }
         ),
       ],
     );
