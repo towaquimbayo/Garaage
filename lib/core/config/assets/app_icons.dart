@@ -31,6 +31,7 @@ class AppIcons {
     'health': _getPath('health', IconType.broken),
     'home': _getPath('home', IconType.broken),
     'image': _getPath('image', IconType.broken),
+    'logout': _getPath('logout', IconType.broken),
     'messages': _getPath('messages-3', IconType.broken),
     'microphone': _getPath('microphone-2', IconType.broken),
     'rotate-right': _getPath('rotate-right', IconType.broken),
