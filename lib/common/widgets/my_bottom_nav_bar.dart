@@ -13,32 +13,122 @@ class MyBottomNavBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<NavigationCubit, NavBarItem>(
       builder: (BuildContext context, state) {
-        return BottomNavigationBar(
-          currentIndex: state.index,
-          onTap: (index) => _onItemTapped(context, index),
-          showSelectedLabels: false,
-          items: [
-            _buildNavBarItem(AppIcons.broken['home']!, AppIcons.bold['home']!, 'Home', state.index == 0),
-            _buildNavBarItem(AppIcons.broken['health']!, AppIcons.bold['health']!, 'Diagnostics', state.index == 1),
-            _buildNavBarItem(AppIcons.broken['messages']!, AppIcons.bold['messages']!, 'Chatbot', state.index == 2),
-            _buildNavBarItem(AppIcons.broken['image']!, AppIcons.bold['image']!, 'AR Identify', state.index == 3),
+        return Stack(
+          children: [
+            NavigationBar(
+              selectedIndex: state.index,
+              onDestinationSelected: (index) => _onItemTapped(context, index),
+              height: 64,
+              indicatorColor: Colors.transparent,
+              labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
+              destinations: [
+                NavigationDestination(
+                  icon: SvgPicture.asset(
+                    AppIcons.broken['home']!,
+                    colorFilter: const ColorFilter.mode(
+                      AppColors.lightGrayDark,
+                      BlendMode.srcIn,
+                    ),
+                    height: 28,
+                  ),
+                  selectedIcon: SvgPicture.asset(
+                    AppIcons.bold['home']!,
+                    colorFilter: const ColorFilter.mode(
+                      AppColors.primary,
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                  label: 'Home',
+                ),
+                NavigationDestination(
+                  icon: SvgPicture.asset(
+                    AppIcons.broken['health']!,
+                    colorFilter: const ColorFilter.mode(
+                      AppColors.lightGrayDark,
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                  selectedIcon: SvgPicture.asset(
+                    AppIcons.bold['health']!,
+                    colorFilter: const ColorFilter.mode(
+                      AppColors.primary,
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                  label: 'Diagnostics',
+                ),
+                NavigationDestination(
+                  icon: SvgPicture.asset(
+                    AppIcons.broken['messages']!,
+                    colorFilter: const ColorFilter.mode(
+                      AppColors.lightGrayDark,
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                  selectedIcon: SvgPicture.asset(
+                    AppIcons.bold['messages']!,
+                    colorFilter: const ColorFilter.mode(
+                      AppColors.primary,
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                  label: 'Chatbot',
+                ),
+                NavigationDestination(
+                  icon: SvgPicture.asset(
+                    AppIcons.broken['image']!,
+                    colorFilter: const ColorFilter.mode(
+                      AppColors.lightGrayDark,
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                  selectedIcon: SvgPicture.asset(
+                    AppIcons.bold['image']!,
+                    colorFilter: const ColorFilter.mode(
+                      AppColors.primary,
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                  label: 'AR Identify',
+                ),
+              ],
+            ),
+            Positioned(
+              top: 0,
+              left: _getIndicatorPosition(state, context),
+              child: Container(
+                height: 4,
+                width: 32,
+                decoration: const BoxDecoration(
+                  color: AppColors.primary,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(10),
+                    bottomRight: Radius.circular(10),
+                  )
+                ),
+              ),
+            ),
           ],
         );
       },
     );
   }
 
-  BottomNavigationBarItem _buildNavBarItem(String brokenIcon, String boldIcon, String label, bool isActive) {
-    return BottomNavigationBarItem(
-      icon: SvgPicture.asset(
-        isActive ? boldIcon : brokenIcon,
-        colorFilter: ColorFilter.mode(
-          isActive ? AppColors.primary : AppColors.lightGrayDark,
-          BlendMode.srcIn,
-        ),
-      ),
-      label: label,
-    );
+  double _getIndicatorPosition(NavBarItem state, BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final itemWidth = screenWidth / 4; // 4 is the number of items in the bottom nav bar
+    switch (state) {
+      case NavBarItem.home:
+        return itemWidth / 2 - 16; // 16 is half the indicator width
+      case NavBarItem.diagnostics:
+        return itemWidth * 1.5 - 16;
+      case NavBarItem.chatbot:
+        return itemWidth * 2.5 - 16;
+      case NavBarItem.arIdentify:
+        return itemWidth * 3.5 - 16;
+      default:
+        return 0;
+    }
   }
 
   void _onItemTapped(BuildContext context, int index) {
