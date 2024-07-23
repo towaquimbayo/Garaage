@@ -9,6 +9,7 @@ import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_text.dart';
 import '../../../data/models/auth/sign_in_user_req.dart';
 import '../../../domain/usecases/auth/sign_in.dart';
+import '../../../domain/usecases/auth/sign_in_with_google.dart';
 import '../../../service_locator.dart';
 import '../../home/pages/home.dart';
 import 'register.dart';
@@ -23,15 +24,16 @@ class SignInPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar(
-          leading: true,
-          title: SvgPicture.asset(
-            AppVectors.logo,
-            colorFilter: const ColorFilter.mode(
-              AppColors.primary,
-              BlendMode.srcIn,
-            ),
-            height: 24,
-          )),
+        leading: true,
+        title: SvgPicture.asset(
+          AppVectors.logo,
+          colorFilter: const ColorFilter.mode(
+            AppColors.primary,
+            BlendMode.srcIn,
+          ),
+          height: 24,
+        )
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
@@ -76,7 +78,7 @@ class SignInPage extends StatelessWidget {
             const SizedBox(height: 4),
             _redirectText(context),
             const SizedBox(height: 8),
-            _withGoogle(),
+            _withGoogle(context),
           ],
         ),
       ),
@@ -171,7 +173,7 @@ class SignInPage extends StatelessWidget {
     );
   }
 
-  Widget _withGoogle() {
+  Widget _withGoogle(BuildContext context) {
     return Column(
       children: [
         Container(
@@ -183,7 +185,26 @@ class SignInPage extends StatelessWidget {
           type: 'secondary',
           text: 'Continue with Google',
           leftIcon: AppIcons.broken['google'],
-          onPressed: () {},
+          onPressed: () async {
+            var result = await sl<SignInWithGoogleUseCase>().call();
+            result.fold(
+              (l) {
+                var snackBar = SnackBar(
+                  content: Text(l),
+                  behavior: SnackBarBehavior.floating,
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              },
+              (r) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => const HomePage(),
+                  ),
+                );
+              },
+            );
+          },
         )
       ],
     );
