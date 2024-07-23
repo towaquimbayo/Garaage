@@ -4,7 +4,7 @@ class SplashCubit extends Cubit<bool> {
   SplashCubit() : super(true);
 
   Future<void> hideSplash() async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 1));
     emit(false);
   }
 }
