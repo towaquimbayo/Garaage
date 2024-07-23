@@ -7,6 +7,8 @@ import '../../../core/config/assets/app_icons.dart';
 import '../../../core/config/assets/app_vectors.dart';
 import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_text.dart';
+import '../../../core/error/error_handler.dart';
+import '../../../core/error/failures.dart';
 import '../../../data/models/auth/create_user_req.dart';
 import '../../../domain/usecases/auth/register.dart';
 import '../../../domain/usecases/auth/sign_in_with_google.dart';
@@ -62,12 +64,9 @@ class RegisterPage extends StatelessWidget {
               text: 'Register',
               onPressed: () async {
                 if (!_termsAccepted.value) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Please accept the terms and conditions.'),
-                      behavior: SnackBarBehavior.floating,
-                    ),
-                  );
+                  String type = 'error';
+                  String message = 'Please accept the terms and conditions.';
+                  ErrorHandler.handleError(context, ClientFailure(type, message));
                   return;
                 }
                 
@@ -80,13 +79,7 @@ class RegisterPage extends StatelessWidget {
                   ),
                 );
                 result.fold(
-                  (l) {
-                    var snackBar = SnackBar(
-                      content: Text(l),
-                      behavior: SnackBarBehavior.floating,
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  },
+                  (l) => ErrorHandler.handleError(context, l),
                   (r) {
                     Navigator.of(context).pushNamed(NavigationPage.routeName);
                   },
@@ -327,13 +320,7 @@ class RegisterPage extends StatelessWidget {
           onPressed: () async {
             var result = await sl<SignInWithGoogleUseCase>().call();
             result.fold(
-              (l) {
-                var snackBar = SnackBar(
-                  content: Text(l),
-                  behavior: SnackBarBehavior.floating,
-                );
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-              },
+              (l) => ErrorHandler.handleError(context, l),
               (r) {
                 Navigator.of(context).pushNamed(NavigationPage.routeName);
               },

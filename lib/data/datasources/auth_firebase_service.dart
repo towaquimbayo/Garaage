@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../../core/error/failures.dart';
 import '../models/auth/create_user_req.dart';
 import '../models/auth/sign_in_user_req.dart';
 
@@ -23,15 +24,20 @@ class AuthFirebaseServiceImpl implements AuthFirebaseService {
 
       return const Right('User signed in successfully.');
     } on FirebaseAuthException catch (e) {
+      String type = 'error';
       String message = '';
 
-      if (e.code == 'invalid-email') {
+      if (e.code == 'channel-error') {
+        message = 'One or more of the fields are empty.';
+      } else if (e.code == 'network-request-failed') {
+        message = 'No internet connection.';
+      } else if (e.code == 'invalid-email') {
         message = 'No user found for that email.';
       } else if (e.code == 'invalid-credential') {
         message = 'Wrong password provided for that user.';
       }
 
-      return Left(message);
+      return Left(ServerFailure(type, message));
     }
   }
 
@@ -54,15 +60,22 @@ class AuthFirebaseServiceImpl implements AuthFirebaseService {
 
       return const Right('User created successfully.');
     } on FirebaseAuthException catch (e) {
+      String type = 'error';
       String message = '';
 
-      if (e.code == 'weak-password') {
-        message = 'The password provided is too weak.';
+      if (e.code == 'channel-error') {
+        message = 'One or more of the fields are empty.';
+      } else if (e.code == 'network-request-failed') {
+        message = 'No internet connection.';
+      } else if (e.code == 'invalid-email') {
+        message = 'The email address is badly formatted.';
+      } else if (e.code == 'weak-password') {
+        message = 'Password should be at least 6 characters.';
       } else if (e.code == 'email-already-in-use') {
         message = 'The account already exists for that email.';
       }
 
-      return Left(message);
+      return Left(ServerFailure(type, message));
     }
   }
 
@@ -70,7 +83,7 @@ class AuthFirebaseServiceImpl implements AuthFirebaseService {
   Future<Either> signInWithGoogle() async {
     try {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-      if (googleUser == null) return const Left('Google sign in was cancelled');
+      if (googleUser == null) throw 'Google sign in cancelled';
 
       final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
       final credential = GoogleAuthProvider.credential(
@@ -92,7 +105,9 @@ class AuthFirebaseServiceImpl implements AuthFirebaseService {
 
       return const Right('Signed in with Google successfully');
     } catch (e) {
-      return Left('Error signing in with Google: ${e.toString()}');
+      String type = 'error';
+      String message = 'Error signing in with Google: ${e.toString()}';
+      return Left(ServerFailure(type, message));
     }
   }
 }

@@ -7,6 +7,7 @@ import '../../../core/config/assets/app_icons.dart';
 import '../../../core/config/assets/app_vectors.dart';
 import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_text.dart';
+import '../../../core/error/error_handler.dart';
 import '../../../data/models/auth/sign_in_user_req.dart';
 import '../../../domain/usecases/auth/sign_in.dart';
 import '../../../domain/usecases/auth/sign_in_with_google.dart';
@@ -60,13 +61,7 @@ class SignInPage extends StatelessWidget {
                   ),
                 );
                 result.fold(
-                  (l) {
-                    var snackBar = SnackBar(
-                      content: Text(l),
-                      behavior: SnackBarBehavior.floating,
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  },
+                  (l) => ErrorHandler.handleError(context, l),
                   (r) {
                     Navigator.of(context).pushNamed(NavigationPage.routeName);
                   },
@@ -197,13 +192,7 @@ class SignInPage extends StatelessWidget {
           onPressed: () async {
             var result = await sl<SignInWithGoogleUseCase>().call();
             result.fold(
-              (l) {
-                var snackBar = SnackBar(
-                  content: Text(l),
-                  behavior: SnackBarBehavior.floating,
-                );
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-              },
+              (l) => ErrorHandler.handleError(context, l),
               (r) {
                 Navigator.of(context).pushNamed(NavigationPage.routeName);
               },
