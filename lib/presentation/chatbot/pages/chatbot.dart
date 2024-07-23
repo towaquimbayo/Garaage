@@ -15,7 +15,7 @@ class ChatbotPage extends StatelessWidget {
       appBar: MyAppBar(
         leading: true,
         title: Text(
-          'Chatbot',
+          'Mika AI',
           style: AppText.pageTitleText.copyWith(color: AppColors.headingText),
         ),
       ),
