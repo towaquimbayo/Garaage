@@ -67,12 +67,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                       ),
                     ),
                   ),
-                  onPressed: () {
-                    Navigator.pushNamed(
-                      context,
-                      ProfilePage.routeName,
-                    );
-                  },
+                  onPressed: () => Navigator.of(context).pushNamed(ProfilePage.routeName),
                 ),
               ]
             : const [],

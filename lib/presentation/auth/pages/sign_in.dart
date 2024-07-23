@@ -68,10 +68,7 @@ class SignInPage extends StatelessWidget {
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   },
                   (r) {
-                    Navigator.pushNamed(
-                      context,
-                      NavigationPage.routeName,
-                    );
+                    Navigator.of(context).pushNamed(NavigationPage.routeName);
                   },
                 );
               },
@@ -175,12 +172,7 @@ class SignInPage extends StatelessWidget {
           style: AppText.bodyS.copyWith(color: AppColors.bodyText),
         ),
         TextButton(
-          onPressed: () {
-            Navigator.pushNamed(
-              context,
-              RegisterPage.routeName,
-            );
-          },
+          onPressed: () => Navigator.of(context).pushNamed(RegisterPage.routeName),
           child: Text(
             'Register Now',
             style: AppText.actionM.copyWith(color: AppColors.primary),
@@ -213,10 +205,7 @@ class SignInPage extends StatelessWidget {
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
               },
               (r) {
-                Navigator.pushNamed(
-                  context,
-                  NavigationPage.routeName,
-                );
+                Navigator.of(context).pushNamed(NavigationPage.routeName);
               },
             );
           },

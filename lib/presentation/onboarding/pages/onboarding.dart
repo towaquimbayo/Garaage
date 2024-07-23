@@ -118,12 +118,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       Flexible(
                         child: MyButton(
                           type: "primary",
-                          onPressed: () {
-                            Navigator.pushNamed(
-                              context,
-                              RegisterPage.routeName, 
-                            );
-                          }, 
+                          onPressed: () => Navigator.of(context).pushNamed(RegisterPage.routeName), 
                           text: "Register",
                         ),
                       ),
@@ -131,12 +126,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       Flexible(
                         child: MyButton(
                           type: "other",
-                          onPressed: () {
-                            Navigator.pushNamed(
-                              context,
-                              SignInPage.routeName,
-                            );
-                          },
+                          onPressed: () => Navigator.of(context).pushNamed(SignInPage.routeName),
                           text: "Sign In",
                         ),
                       ),

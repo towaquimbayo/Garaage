@@ -11,7 +11,7 @@ import '../../../data/models/auth/create_user_req.dart';
 import '../../../domain/usecases/auth/register.dart';
 import '../../../domain/usecases/auth/sign_in_with_google.dart';
 import '../../../service_locator.dart';
-import '../../connect/pages/connect.dart';
+import '../../navigation/pages/navigation.dart';
 import 'sign_in.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -88,10 +88,7 @@ class RegisterPage extends StatelessWidget {
                     ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   },
                   (r) {
-                    Navigator.pushNamed(
-                      context,
-                      ConnectPage.routeName,
-                    );
+                    Navigator.of(context).pushNamed(NavigationPage.routeName);
                   },
                 );
               },
@@ -305,12 +302,7 @@ class RegisterPage extends StatelessWidget {
           style: AppText.bodyS.copyWith(color: AppColors.bodyText),
         ),
         TextButton(
-          onPressed: () {
-            Navigator.pushNamed(
-              context,
-              SignInPage.routeName,
-            );
-          },
+          onPressed: () => Navigator.of(context).pushNamed(SignInPage.routeName),
           child: Text(
             'Sign In',
             style: AppText.actionM.copyWith(color: AppColors.primary),
@@ -343,10 +335,7 @@ class RegisterPage extends StatelessWidget {
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
               },
               (r) {
-                Navigator.pushNamed(
-                  context,
-                  ConnectPage.routeName,
-                );
+                Navigator.of(context).pushNamed(NavigationPage.routeName);
               },
             );
           },

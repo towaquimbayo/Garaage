@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../common/widgets/my_bottom_nav_bar.dart';
-import '../../ar_identify/pages/ar_identify.dart';
-import '../../chatbot/pages/chatbot.dart';
 import '../../diagnostics/pages/diagnostics.dart';
 import '../../home/pages/home.dart';
 import '../bloc/navigation_cubit.dart';
