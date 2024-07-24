@@ -102,12 +102,11 @@ class MyBottomNavBar extends StatelessWidget {
                 height: 4,
                 width: 32,
                 decoration: const BoxDecoration(
-                  color: AppColors.primary,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(10),
-                    bottomRight: Radius.circular(10),
-                  )
-                ),
+                    color: AppColors.primary,
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(10),
+                      bottomRight: Radius.circular(10),
+                    )),
               ),
             ),
           ],
@@ -118,7 +117,8 @@ class MyBottomNavBar extends StatelessWidget {
 
   double _getIndicatorPosition(NavBarItem state, BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final itemWidth = screenWidth / 4; // 4 is the number of items in the bottom nav bar
+    final itemWidth =
+        screenWidth / 4; // 4 is the number of items in the bottom nav bar
     switch (state) {
       case NavBarItem.home:
         return itemWidth / 2 - 16; // 16 is half the indicator width
@@ -136,13 +136,16 @@ class MyBottomNavBar extends StatelessWidget {
   void _onItemTapped(BuildContext context, int index) {
     switch (index) {
       case 0:
-        BlocProvider.of<NavigationCubit>(context).getNavBarItem(NavBarItem.home);
+        BlocProvider.of<NavigationCubit>(context)
+            .getNavBarItem(NavBarItem.home);
         break;
       case 1:
-        BlocProvider.of<NavigationCubit>(context).getNavBarItem(NavBarItem.diagnostics);
+        BlocProvider.of<NavigationCubit>(context)
+            .getNavBarItem(NavBarItem.diagnostics);
         break;
       case 2:
-        Navigator.of(context).pushNamed(ChatbotPage.routeName);
+        BlocProvider.of<NavigationCubit>(context)
+            .getNavBarItem(NavBarItem.chatbot);
         break;
       case 3:
         Navigator.of(context).pushNamed(ARIdentifyPage.routeName);
