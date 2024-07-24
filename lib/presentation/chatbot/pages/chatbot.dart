@@ -7,6 +7,29 @@ import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
+import '../../../common/widgets/my_app_bar.dart';
+import '../../../core/config/theme/app_colors.dart';
+import '../../../core/config/theme/app_text.dart';
+
+class ChatbotPage extends StatelessWidget {
+  const ChatbotPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: MyAppBar(
+        leading: true,
+        title: Text(
+          'ChatBot',
+          style: AppText.pageTitleText.copyWith(color: AppColors.headingText),
+        ),
+      ),
+      body: const Center(
+        child: Chatbot(),
+      ),
+    );
+  }
+}
 
 class Chatbot extends StatefulWidget {
   const Chatbot({super.key});
@@ -54,14 +77,13 @@ class _ChatbotState extends State<Chatbot> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text(
-          "Gemini Chat",
-        ),
+    final size = MediaQuery.of(context).size;
+    return SingleChildScrollView(
+      child: SizedBox(
+        height: size.height * 0.8,
+        width: size.width,
+        child: _buildUI(),
       ),
-      body: _buildUI(),
     );
   }
 
