@@ -58,4 +58,31 @@ class DiagnosticsPage extends StatelessWidget {
       ),
     );
   }
+}}
+
+class Error {
+  final String code;
+  final String description;
+  final List<String> causes;
+  final List<String> solutions;
+  final List<Map<String, dynamic>> partsNeeded;
+
+  const Error({
+    required this.code,
+    required this.description,
+    required this.causes,
+    required this.solutions,
+    required this.partsNeeded,
+  });
+
+  factory Error.fromMap(Map<String, dynamic> map) {
+    return Error(
+      code: map['code'],
+      description: map['description'],
+      causes: List<String>.from(map['causes']),
+      solutions: List<String>.from(map['solutions']),
+      partsNeeded: List<Map<String, dynamic>>.from(map['partsNeeded']),
+    );
+  }
 }
+
