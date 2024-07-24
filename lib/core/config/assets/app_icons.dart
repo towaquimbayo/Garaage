@@ -39,10 +39,12 @@ class AppIcons {
     'logout': _getPath('logout', IconType.broken),
     'messages': _getPath('messages-3', IconType.broken),
     'microphone': _getPath('microphone-2', IconType.broken),
+    'people': _getPath('people', IconType.broken),
     'rotate-right': _getPath('rotate-right', IconType.broken),
     'rpm': _getPath('radar', IconType.broken),
     'shield-tick': _getPath('shield-tick', IconType.broken),
     'speed': _getPath('speedometer', IconType.broken),
+    'transmission': _getPath('data', IconType.broken),
     'user': _getPath('user', IconType.broken),
     'warning': _getPath('warning-2', IconType.broken),
   };
