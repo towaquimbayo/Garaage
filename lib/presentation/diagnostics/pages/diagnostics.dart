@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../common/widgets/my_app_bar.dart';
 import '../../../core/config/theme/app_colors.dart';
@@ -43,6 +44,7 @@ class DiagnosticsPage extends StatelessWidget {
     },
   ];
 
+  // return a accordion expandable list of error codes
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,12 +55,24 @@ class DiagnosticsPage extends StatelessWidget {
           style: AppText.pageTitleText.copyWith(color: AppColors.headingText),
         ),
       ),
-      body: const Center(
-        child: Text('Welcome to the Diagnostics Page'),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: errorCodes.isEmpty
+            ? Center(
+                child: Text(
+                  'No error codes found.',
+                  style: AppText.bodyText.copyWith(color: AppColors.bodyText),
+                ),
+              )
+            : Column(
+                children: errorCodes
+                    .map((error) => ErrorCodePanel(error: Error.fromMap(error)))
+                    .toList(),
+              ),
       ),
     );
   }
-}}
+}
 
 class Error {
   final String code;
@@ -86,3 +100,159 @@ class Error {
   }
 }
 
+class ErrorCodePanel extends StatelessWidget {
+  final Error error;
+
+  const ErrorCodePanel({
+    super.key,
+    required this.error,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        ExpansionTile(
+          title: Text(
+            'Error Description',
+            style: AppText.headingText.copyWith(color: AppColors.headingText),
+          ),
+          shape: const Border(
+            bottom: BorderSide(
+              color: Color(0xFFA1A1A1),
+              width: 0.5,
+            ),
+          ),
+          children: [
+            ListTile(
+              subtitle: Text(
+                error.description,
+                style: AppText.bodyText.copyWith(color: AppColors.bodyText),
+              ),
+            ),
+          ],
+        ),
+        ExpansionTile(
+          title: Text(
+            'Possible Cause(s)',
+            style: AppText.headingText.copyWith(color: AppColors.headingText),
+          ),
+          shape: const Border(
+            bottom: BorderSide(
+              color: Color(0xFFA1A1A1),
+              width: 0.5,
+            ),
+          ),
+          children: [
+            ListTile(
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: error.causes
+                    .map((cause) => Text(
+                          '\u2022 $cause',
+                          style: AppText.bodyText
+                              .copyWith(color: AppColors.bodyText),
+                        ))
+                    .toList(),
+              ),
+            ),
+          ],
+        ),
+        ExpansionTile(
+          title: Text(
+            'How To Fix',
+            style: AppText.headingText.copyWith(color: AppColors.headingText),
+          ),
+          shape: const Border(
+            bottom: BorderSide(
+              color: Color(0xFFA1A1A1),
+              width: 0.5,
+            ),
+          ),
+          children: [
+            ListTile(
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: error.solutions
+                    .asMap()
+                    .entries
+                    .map(
+                      (entry) => Text(
+                        '${entry.key + 1}. ${entry.value}',
+                        style: AppText.bodyText
+                            .copyWith(color: AppColors.bodyText),
+                      ),
+                    )
+                    .toList(),
+              ),
+            ),
+          ],
+        ),
+        ExpansionTile(
+          title: Text(
+            'Parts Needed',
+            style: AppText.headingText.copyWith(color: AppColors.headingText),
+          ),
+          shape: const Border(
+            bottom: BorderSide(
+              color: Color(0xFFA1A1A1),
+              width: 0.5,
+            ),
+          ),
+          children: error.partsNeeded
+              .map(
+                (part) => ListTile(
+                  subtitle: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          part['name'],
+                          style: AppText.bodyText.copyWith(
+                            color: AppColors.bodyText,
+                          ),
+                          softWrap: true,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      TextButton(
+                        onPressed: () async {
+                          if (await canLaunchUrl(Uri.parse(part['link']))) {
+                            await launchUrl(
+                              part['link'],
+                              mode: LaunchMode.inAppBrowserView,
+                              browserConfiguration:
+                                  const BrowserConfiguration(showTitle: true),
+                            );
+                          }
+                        },
+                        child: Row(
+                          children: [
+                            Text(
+                              '\$${part['price']} on ${part['vendor']}',
+                              style: AppText.bodyText.copyWith(
+                                color: AppColors.bodyText,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            const SizedBox(width: 5),
+                            const Icon(
+                              Icons.link,
+                              color: AppColors.bodyText,
+                              size: 16,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+              .toList(),
+        )
+      ],
+    );
+  }
+}
