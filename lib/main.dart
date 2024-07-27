@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:garaage/presentation/chatbot/bloc/chatbot_cubit.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -52,6 +53,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<NavigationCubit>(
           create: (BuildContext context) => NavigationCubit(),
         ),
+        BlocProvider(
+          create: (BuildContext context) => ChatbotCubit(),
+        )
       ],
       child: BlocListener<SplashCubit, bool>(
         listener: (BuildContext context, showSplash) {

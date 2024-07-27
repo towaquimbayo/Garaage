@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
@@ -10,6 +11,7 @@ import 'package:speech_to_text/speech_to_text.dart';
 import '../../../common/widgets/my_app_bar.dart';
 import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_text.dart';
+import '../bloc/chatbot_cubit.dart';
 
 class ChatbotPage extends StatelessWidget {
   const ChatbotPage({super.key});
@@ -18,7 +20,7 @@ class ChatbotPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar(
-        leading: true,
+        actions: true,
         title: Text(
           'ChatBot',
           style: AppText.pageTitleText.copyWith(color: AppColors.headingText),
@@ -77,38 +79,45 @@ class _ChatbotState extends State<Chatbot> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-    return SingleChildScrollView(
-      child: SizedBox(
-        height: size.height * 0.8,
-        width: size.width,
-        child: _buildUI(),
-      ),
+    return BlocBuilder<ChatbotCubit, ChatbotState>(
+      builder: (context, state) {
+        final size = MediaQuery.of(context).size;
+        final _sendMessage =
+            BlocProvider.of<ChatbotCubit>(context).addChatMessage;
+        print(state.chatMessages);
+        return SizedBox(
+          height: size.height * 0.8,
+          width: size.width,
+          child: _buildUI(state, _sendMessage),
+        );
+      },
     );
   }
 
-  Widget _buildUI() {
+  Widget _buildUI(
+    ChatbotState chatBotState,
+    Function(ChatMessage) sendMessage,
+  ) {
     return DashChat(
-      inputOptions: InputOptions(leading: [
-        IconButton(
-          onPressed: _sendMediaMessage,
-          icon: const Icon(
-            Icons.image_outlined,
-          ),
-        )
-      ], trailing: [
-        IconButton(
-          onPressed:
-              _speechToText.isListening ? _stopListening : _startListening,
-          icon: Icon(
-            _speechToText.isListening ? Icons.mic_off : Icons.mic,
-          ),
-        )
-      ], textController: _controller),
-      currentUser: currentUser,
-      onSend: _sendMessage,
-      messages: messages,
-    );
+        inputOptions: InputOptions(leading: [
+          IconButton(
+            onPressed: _sendMediaMessage,
+            icon: const Icon(
+              Icons.image_outlined,
+            ),
+          )
+        ], trailing: [
+          IconButton(
+            onPressed:
+                _speechToText.isListening ? _stopListening : _startListening,
+            icon: Icon(
+              _speechToText.isListening ? Icons.mic_off : Icons.mic,
+            ),
+          )
+        ], textController: _controller),
+        currentUser: currentUser,
+        onSend: sendMessage,
+        messages: chatBotState.chatMessages);
   }
 
   void _sendMessage(ChatMessage chatMessage) {
