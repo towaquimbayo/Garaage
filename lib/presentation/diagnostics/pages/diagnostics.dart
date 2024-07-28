@@ -79,6 +79,7 @@ class DiagnosticsPage extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 10),
+                ErrorCodePanel(error: Error.fromMap(selectedError)),
               ]),
       ),
     );
@@ -257,6 +258,7 @@ class ErrorCodePanel extends StatelessWidget {
             'Error Description',
             style: AppText.headingText.copyWith(color: AppColors.headingText),
           ),
+          initiallyExpanded: true,
           shape: const Border(
             bottom: BorderSide(
               color: Color(0xFFA1A1A1),
