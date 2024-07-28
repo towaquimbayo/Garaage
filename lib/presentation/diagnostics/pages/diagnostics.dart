@@ -7,10 +7,9 @@ import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/assets/app_icons.dart';
 import '../../../core/config/theme/app_text.dart';
 
-class DiagnosticsPage extends StatelessWidget {
+class DiagnosticsPage extends StatefulWidget {
   const DiagnosticsPage({super.key});
 
-  // @TODO: Replace sample Error codes with DB / Bloc data
   static final errorCodes = [
     {
       'code': 'P0128',
@@ -77,8 +76,25 @@ class DiagnosticsPage extends StatelessWidget {
       ],
     },
   ];
-  static final Map<String, Object> selectedError =
-      errorCodes[0]; // @TODO: Replace with Bloc state
+
+  @override
+  State<DiagnosticsPage> createState() => _DiagnosticsPageState();
+}
+
+class _DiagnosticsPageState extends State<DiagnosticsPage> {
+  late Map<String, Object> selectedError;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedError = DiagnosticsPage.errorCodes[0];
+  }
+
+  void _updateSelectedError(Map<String, Object> error) {
+    setState(() {
+      selectedError = error;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +108,7 @@ class DiagnosticsPage extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 15),
-        child: errorCodes.isEmpty
+        child: DiagnosticsPage.errorCodes.isEmpty
             ? Center(
                 child: Column(
                   children: [
@@ -112,8 +128,9 @@ class DiagnosticsPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     ErrorCodeDropdown(
-                      errorCodes: errorCodes,
+                      errorCodes: DiagnosticsPage.errorCodes,
                       selectedError: selectedError,
+                      onChanged: _updateSelectedError,
                     ),
                     const SizedBox(width: 10),
                     const LastUpdated(),
@@ -127,21 +144,17 @@ class DiagnosticsPage extends StatelessWidget {
   }
 }
 
-class ErrorCodeDropdown extends StatefulWidget {
+class ErrorCodeDropdown extends StatelessWidget {
   final List<Map<String, Object>> errorCodes;
   final Map<String, Object> selectedError;
+  final ValueChanged<Map<String, Object>> onChanged;
+
   const ErrorCodeDropdown({
     super.key,
     required this.errorCodes,
     required this.selectedError,
+    required this.onChanged,
   });
-
-  @override
-  State<ErrorCodeDropdown> createState() => _ErrorCodeDropdownState();
-}
-
-class _ErrorCodeDropdownState extends State<ErrorCodeDropdown> {
-  Map<String, Object> selectedError = DiagnosticsPage.selectedError;
 
   @override
   Widget build(BuildContext context) {
@@ -157,21 +170,17 @@ class _ErrorCodeDropdownState extends State<ErrorCodeDropdown> {
         dropdownColor: AppColors.primary,
         borderRadius: BorderRadius.circular(10),
         iconEnabledColor: AppColors.surface,
-        value: widget.selectedError,
+        value: selectedError,
         onChanged: (error) {
-          setState(() {
-            selectedError = error!;
-          });
+          onChanged(error!);
         },
-        items: widget.errorCodes
+        items: errorCodes
             .map(
               (error) => DropdownMenuItem<Map<String, Object>>(
                 value: error,
                 child: Text(
                   error['code'] as String,
-                  style: AppText.bodyText.copyWith(
-                    color: AppColors.surface,
-                  ),
+                  style: AppText.bodyText.copyWith(color: AppColors.surface),
                 ),
               ),
             )
