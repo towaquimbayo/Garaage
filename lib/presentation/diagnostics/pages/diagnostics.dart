@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../common/widgets/my_app_bar.dart';
 import '../../../core/config/theme/app_colors.dart';
+import '../../../core/config/assets/app_icons.dart';
 import '../../../core/config/theme/app_text.dart';
 
 class DiagnosticsPage extends StatelessWidget {
@@ -64,11 +66,78 @@ class DiagnosticsPage extends StatelessWidget {
                   style: AppText.bodyText.copyWith(color: AppColors.bodyText),
                 ),
               )
-            : Column(
-                children: errorCodes
-                    .map((error) => ErrorCodePanel(error: Error.fromMap(error)))
-                    .toList(),
+            : Column(children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ErrorCodeDropdown(
+                      errorCodes: errorCodes,
+                      selectedError: selectedError,
+                    ),
+                    const SizedBox(width: 10),
+                  ],
+                ),
+                const SizedBox(height: 10),
+              ]),
+      ),
+    );
+  }
+}
+
+class ErrorCodeDropdown extends StatefulWidget {
+  final List<Map<String, Object>> errorCodes;
+  final Map<String, Object> selectedError;
+  const ErrorCodeDropdown({
+    super.key,
+    required this.errorCodes,
+    required this.selectedError,
+  });
+
+  @override
+  State<ErrorCodeDropdown> createState() => _ErrorCodeDropdownState();
+}
+
+class _ErrorCodeDropdownState extends State<ErrorCodeDropdown> {
+  Map<String, Object> selectedError = DiagnosticsPage.selectedError;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      margin: const EdgeInsets.only(left: 15),
+      decoration: const BoxDecoration(
+        color: AppColors.primary,
+        shape: BoxShape.rectangle,
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
+      child: DropdownButton<Map<String, Object>>(
+        dropdownColor: AppColors.primary,
+        borderRadius: BorderRadius.circular(10),
+        iconEnabledColor: AppColors.surface,
+        value: widget.selectedError,
+        onChanged: (error) {
+          setState(() {
+            selectedError = error!;
+          });
+        },
+        items: widget.errorCodes
+            .map(
+              (error) => DropdownMenuItem<Map<String, Object>>(
+                value: error,
+                child: Text(
+                  error['code'] as String,
+                  style: AppText.bodyText.copyWith(
+                    color: AppColors.surface,
+                  ),
+                ),
               ),
+            )
+            .toList(),
+        underline: const SizedBox(),
+      ),
+    );
+  }
+}
       ),
     );
   }
