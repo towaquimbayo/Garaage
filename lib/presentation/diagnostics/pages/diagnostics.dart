@@ -75,6 +75,7 @@ class DiagnosticsPage extends StatelessWidget {
                       selectedError: selectedError,
                     ),
                     const SizedBox(width: 10),
+                    const LastUpdated(),
                   ],
                 ),
                 const SizedBox(height: 10),
@@ -138,6 +139,76 @@ class _ErrorCodeDropdownState extends State<ErrorCodeDropdown> {
     );
   }
 }
+
+class LastUpdated extends StatelessWidget {
+  const LastUpdated({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(5),
+        color: AppColors.surface,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Last Updated',
+            style: AppText.bodyText.copyWith(
+              fontSize: 12,
+              color: AppColors.darkGrayLight,
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'July 27, 2024',
+                    style: AppText.bodyText.copyWith(
+                      color: AppColors.bodyText,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Text(
+                    '02:30 PM',
+                    style: AppText.bodyText.copyWith(
+                      color: AppColors.bodyText,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  )
+                ],
+              ),
+              const SizedBox(width: 10),
+              IconButton(
+                onPressed: () => {},
+                icon: Container(
+                  decoration: const BoxDecoration(
+                    color: AppColors.darkGrayDarkest,
+                    shape: BoxShape.rectangle,
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10),
+                    ),
+                  ),
+                  padding: const EdgeInsets.all(8),
+                  child: SvgPicture.asset(
+                    AppIcons.broken['rotate-right']!,
+                    width: 18,
+                    colorFilter: const ColorFilter.mode(
+                      AppColors.surface,
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
