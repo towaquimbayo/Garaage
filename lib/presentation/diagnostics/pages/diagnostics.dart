@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:garaage/presentation/chatbot/pages/chatbot.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../common/widgets/my_app_bar.dart';
@@ -182,7 +183,85 @@ class _DiagnosticsPageState extends State<DiagnosticsPage> {
                 ),
                 const SizedBox(height: 10),
                 ErrorCodePanel(error: Error.fromMap(selectedError)),
+                const SizedBox(height: 20),
+                const Chatbot(),
               ]),
+      ),
+    );
+  }
+}
+
+class Chatbot extends StatelessWidget {
+  const Chatbot({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(
+        horizontal: 20,
+        vertical: 10,
+      ),
+      decoration: const BoxDecoration(
+        color: AppColors.surface,
+        shape: BoxShape.rectangle,
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SvgPicture.asset(
+            AppIcons.broken['chatbot']!,
+            width: 40,
+            colorFilter: const ColorFilter.mode(
+              AppColors.primary,
+              BlendMode.srcIn,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'Confused?',
+            style: AppText.headH2.copyWith(
+              color: AppColors.headingText,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'If you need help diagnosing an error code, you can chat with our virtual assistant for assistance.',
+            style: AppText.bodyText.copyWith(
+              color: AppColors.bodyText,
+              fontSize: 12,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pushNamed(ChatbotPage.routeName);
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 40,
+                    vertical: 15,
+                  ),
+                  backgroundColor: AppColors.lightGrayLight,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: const Text(
+                  'Ask Mika AI',
+                  style: TextStyle(
+                    color: AppColors.darkGrayDark,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
