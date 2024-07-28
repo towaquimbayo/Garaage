@@ -38,6 +38,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     user = _auth.currentUser;
     uid = user?.uid;
+    print(uid);
     if (uid != null) _getUserData();
   }
 
@@ -45,8 +46,7 @@ class _HomePageState extends State<HomePage> {
   void _getUserData() async {
     try {
       // @TODO: Replace with actual document ID
-      DocumentSnapshot userDoc =
-          await _db.collection('Users').doc('kXuoDoi8vO0jLUBOMhfO').get();
+      DocumentSnapshot userDoc = await _db.collection('Users').doc(uid).get();
       if (userDoc.exists) {
         Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
         setState(() {

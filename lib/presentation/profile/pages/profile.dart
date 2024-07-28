@@ -60,11 +60,14 @@ class ProfilePage extends StatelessWidget {
                       bottomRight: Radius.circular(80))),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SvgPicture.asset(
-                    AppIcons.broken['user']!,
-                    height: 40,
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 23),
+                    child: SvgPicture.asset(
+                      AppIcons.broken['user']!,
+                      height: 40,
+                    ),
                   ),
                   const Text(
                     "Noufile Saqib",
@@ -158,8 +161,8 @@ class ProfilePage extends StatelessWidget {
                       onPressed: () {},
                       child: Text(
                         "Submit",
-                        style: AppText.buttonText
-                            .copyWith(color: AppColors.surface),
+                        style:
+                            AppText.actionM.copyWith(color: AppColors.surface),
                       ),
                     ),
                   )

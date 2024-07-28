@@ -31,10 +31,6 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  Gemini.init(
-    apiKey: GEMINI_API_KEY,
-  );
-
   await initializeDependencies();
 
   runApp(const MyApp());
