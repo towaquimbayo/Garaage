@@ -44,9 +44,42 @@ class DiagnosticsPage extends StatelessWidget {
         }
       ],
     },
+    {
+      'code': 'P0420',
+      'description':
+          'The catalytic converter is not functioning properly, causing increased emissions, reduced fuel economy, and poor engine performance.',
+      'causes': [
+        'Faulty catalytic converter',
+        'Oxygen sensor malfunction',
+        'Exhaust leak',
+        'Engine misfire',
+      ],
+      'solutions': [
+        'Check the oxygen sensor: Replace if faulty.',
+        'Inspect the catalytic converter: Replace if damaged.',
+        'Check for exhaust leaks: Repair if found.',
+        'Check for engine misfires: Repair if found.',
+      ],
+      'partsNeeded': [
+        {
+          'name': 'Replacement catalytic converter',
+          'price': 199.99,
+          'vendor': 'AutoZone',
+          'link':
+              'https://www.autozone.com/emission-control-and-exhaust/catalytic-converter/davico-catalytic-converter-18200/10007_0_0',
+        },
+        {
+          'name': 'Oxygen sensor',
+          'price': 29.99,
+          'vendor': 'NAPA',
+          'link': 'https://www.napaonline.com/en/p/NGO25024688',
+        }
+      ],
+    },
   ];
+  static final Map<String, Object> selectedError =
+      errorCodes[0]; // @TODO: Replace with Bloc state
 
-  // return a accordion expandable list of error codes
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,9 +94,17 @@ class DiagnosticsPage extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 15),
         child: errorCodes.isEmpty
             ? Center(
-                child: Text(
-                  'No error codes found.',
-                  style: AppText.bodyText.copyWith(color: AppColors.bodyText),
+                child: Column(
+                  children: [
+                    const LastUpdated(),
+                    const SizedBox(height: 20),
+                    Text(
+                      'No error codes found.',
+                      style: AppText.bodyText.copyWith(
+                        color: AppColors.bodyText,
+                      ),
+                    ),
+                  ],
                 ),
               )
             : Column(children: [
