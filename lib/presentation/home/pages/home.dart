@@ -36,6 +36,12 @@ class _HomePageState extends State<HomePage> {
     'errors': 0,
     'fuelConsumed': 70,
     'totalFuel': 100,
+    'speed': 68,
+    'rpm': 2731,
+    'battery': 84,
+    'oil': 59,
+    'coolantCurrent': 90,
+    'coolantDesired': 120,
   };
 
   @override
@@ -88,11 +94,72 @@ class _HomePageState extends State<HomePage> {
               transmission: vehicle['transmission'] as String,
               numSeats: vehicle['numSeats'] as int,
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
             FuelConsumptionCard(
               currentConsumed: vehicle['fuelConsumed'] as int,
               totalConsumed: vehicle['totalFuel'] as int,
             ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  flex: 4,
+                  child: VehicleStatsCard(
+                    value: vehicle['speed'] as int,
+                    icon: AppIcons.broken['speed']!,
+                    mainLabel: 'Speed',
+                    subLabel: 'km/h',
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  flex: 6,
+                  child: VehicleStatsCard(
+                    value: vehicle['rpm'] as int,
+                    icon: AppIcons.broken['rpm']!,
+                    mainLabel: 'Engine RPM',
+                    fixAlignment: true,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  flex: 6,
+                  child: VehicleStatsCard(
+                    value: vehicle['battery'] as int,
+                    icon: AppIcons.broken['battery']!,
+                    mainLabel: 'Car Battery',
+                    postfix: '%',
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  flex: 4,
+                  child: VehicleStatsCard(
+                    value: vehicle['oil'] as int,
+                    icon: AppIcons.broken['drop']!,
+                    mainLabel: 'Oil',
+                    postfix: '%',
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            VehicleStatsCard(
+              value: vehicle['coolantCurrent'] as int,
+              valueAlt: vehicle['coolantDesired'] as int,
+              icon: AppIcons.broken['coolant']!,
+              mainLabel: 'Coolant Temp',
+              subLabel: 'current',
+              subLabelAlt: 'desired',
+              postfix: '°C',
+            ),
+            const SizedBox(height: 20),
           ],
         ),
       ),
@@ -121,7 +188,7 @@ class VehicleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 1,
+      elevation: 0,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Column(
@@ -255,7 +322,7 @@ class FuelConsumptionCard extends StatelessWidget {
         valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
         semanticsLabel: 'Fuel Consumption',
         semanticsValue: '$currentConsumed / $totalConsumed',
-        minHeight: 40,
+        minHeight: 30,
         borderRadius: BorderRadius.circular(50),
       ),
       Positioned(
@@ -282,5 +349,163 @@ class FuelConsumptionCard extends StatelessWidget {
         ),
       ),
     ]);
+  }
+}
+
+class VehicleStatsCard extends StatelessWidget {
+  final int value;
+  final String icon;
+  final String mainLabel;
+  final String? subLabel;
+  final String? postfix;
+  final bool? fixAlignment;
+  final int? valueAlt;
+  final String? subLabelAlt;
+
+  const VehicleStatsCard({
+    super.key,
+    required this.value,
+    required this.icon,
+    required this.mainLabel,
+    this.subLabel,
+    this.postfix,
+    this.fixAlignment = false,
+    this.valueAlt,
+    this.subLabelAlt,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 5,
+        vertical: 10,
+      ),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: valueAlt != null && subLabelAlt != null
+                ? MainAxisAlignment.spaceEvenly
+                : MainAxisAlignment.center,
+            children: [
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(
+                        value.toString(),
+                        style: AppText.headH1.copyWith(
+                          color: AppColors.headingText,
+                          fontSize: 40,
+                        ),
+                      ),
+                      postfix != null
+                          ? Text(
+                              postfix!,
+                              style: AppText.bodyText.copyWith(
+                                color: AppColors.bodyText,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )
+                          : const SizedBox(),
+                    ],
+                  ),
+                  subLabel != null
+                      ? Text(
+                          subLabel!,
+                          style: AppText.bodyText.copyWith(
+                            color: AppColors.darkGrayLightest,
+                            fontSize: 14,
+                          ),
+                        )
+                      : fixAlignment == true
+                          ? const SizedBox(height: 20)
+                          : const SizedBox(),
+                ],
+              ),
+              valueAlt != null && subLabelAlt != null
+                  ? Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              valueAlt.toString(),
+                              style: AppText.headH1.copyWith(
+                                color: AppColors.headingText,
+                                fontSize: 40,
+                              ),
+                            ),
+                            postfix != null
+                                ? Text(
+                                    postfix!,
+                                    style: AppText.bodyText.copyWith(
+                                      color: AppColors.bodyText,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  )
+                                : const SizedBox(),
+                          ],
+                        ),
+                        subLabelAlt != null
+                            ? Text(
+                                subLabelAlt!,
+                                style: AppText.bodyText.copyWith(
+                                  color: AppColors.darkGrayLightest,
+                                  fontSize: 14,
+                                ),
+                              )
+                            : fixAlignment == true
+                                ? const SizedBox(height: 20)
+                                : const SizedBox(),
+                      ],
+                    )
+                  : const SizedBox(),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Container(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 10,
+            ),
+            decoration: BoxDecoration(
+              color: AppColors.lightGrayLight,
+              borderRadius: BorderRadius.circular(50),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SvgPicture.asset(
+                  icon,
+                  width: 24,
+                  colorFilter: const ColorFilter.mode(
+                    AppColors.darkGrayLightest,
+                    BlendMode.srcIn,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Text(
+                  mainLabel,
+                  style: AppText.bodyText.copyWith(
+                    color: AppColors.darkGrayLightest,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
   }
 }
