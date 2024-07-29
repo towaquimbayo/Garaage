@@ -1,13 +1,17 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:garaage/core/error/error_handler.dart';
+import 'package:garaage/data/datasources/auth_firebase_service.dart';
+import 'package:garaage/domain/entities/user.dart';
+import 'package:garaage/presentation/profile/bloc/profile_cubit.dart';
+import 'package:garaage/presentation/profile/bloc/profile_cubit.dart';
 
 import '../../../common/widgets/my_app_bar.dart';
 import '../../../core/config/assets/app_icons.dart';
 import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_text.dart';
+import '../../../service_locator.dart';
 
 class ProfilePage extends StatelessWidget {
   static String routeName = '/profile';
@@ -16,22 +20,36 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: MyAppBar(
-        leading: true,
-        logout: true,
-        backgroundColor: AppColors.surface,
-        title: Text(
-          'Profile',
-          style: AppText.pageTitleText.copyWith(color: AppColors.headingText),
-        ),
-      ),
-      body: _buildUI(context),
+    return BlocBuilder<ProfileCubit, ProfileState>(
+      builder: (context, state) {
+        UserEntity? user;
+        sl<AuthFirebaseService>().getUser().fold(
+          (l) {
+            user = l;
+          },
+          (r) {
+            ErrorHandler.handleError(context, r);
+          },
+        );
+        return Scaffold(
+          resizeToAvoidBottomInset: false,
+          appBar: MyAppBar(
+            leading: true,
+            logout: true,
+            backgroundColor: AppColors.surface,
+            title: Text(
+              'Profile',
+              style:
+                  AppText.pageTitleText.copyWith(color: AppColors.headingText),
+            ),
+          ),
+          body: _buildUI(context, user),
+        );
+      },
     );
   }
 
-  Widget _buildUI(BuildContext context) {
+  Widget _buildUI(BuildContext context, UserEntity? user) {
     final double screenHeight = MediaQuery.of(context).size.height;
     final double keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
     return SizedBox(
@@ -69,12 +87,14 @@ class ProfilePage extends StatelessWidget {
                       height: 40,
                     ),
                   ),
-                  const Text(
-                    "Noufile Saqib",
+                  Text(
+                    user == null
+                        ? "null"
+                        : "${user.firstName} ${user.lastName}",
                     style: AppText.headH3,
                   ),
                   Text(
-                    "test@gmail.com",
+                    user == null ? "null" : "${user.email}",
                     style: AppText.bodyS.copyWith(color: AppColors.bodyText),
                   )
                 ],

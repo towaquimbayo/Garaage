@@ -4,7 +4,6 @@ import 'dart:typed_data';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dash_chat_2/dash_chat_2.dart';
-import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:garaage/data/models/chat/ai_message_request.dart';
 import 'package:garaage/data/models/chat/ai_message_response.dart';
 import 'package:garaage/domain/usecases/chat/get_ai_message.dart';
