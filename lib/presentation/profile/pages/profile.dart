@@ -2,16 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:garaage/core/error/error_handler.dart';
-import 'package:garaage/data/datasources/auth_firebase_service.dart';
 import 'package:garaage/domain/entities/user.dart';
-import 'package:garaage/presentation/profile/bloc/profile_cubit.dart';
 import 'package:garaage/presentation/profile/bloc/profile_cubit.dart';
 
 import '../../../common/widgets/my_app_bar.dart';
 import '../../../core/config/assets/app_icons.dart';
 import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_text.dart';
-import '../../../service_locator.dart';
 
 class ProfilePage extends StatelessWidget {
   static String routeName = '/profile';
@@ -23,12 +20,14 @@ class ProfilePage extends StatelessWidget {
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
         UserEntity? user;
-        sl<AuthFirebaseService>().getUser().fold(
+        state.result?.fold(
           (l) {
             user = l;
           },
           (r) {
-            ErrorHandler.handleError(context, r);
+            Future(() {
+              ErrorHandler.handleError(context, r);
+            });
           },
         );
         return Scaffold(

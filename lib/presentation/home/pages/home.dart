@@ -47,7 +47,9 @@ class _HomePageState extends State<HomePage> {
                 user = l;
               },
               (r) {
-                ErrorHandler.handleError(context, r);
+                Future(() {
+                  ErrorHandler.handleError(context, r);
+                });
               },
             );
             String? firstName;

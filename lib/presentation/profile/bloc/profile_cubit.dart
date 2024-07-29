@@ -10,8 +10,8 @@ part 'profile_state.dart';
 class ProfileCubit extends Cubit<ProfileState> {
   ProfileCubit() : super(ProfileState());
 
-  void getUser() {
-    final result = sl<AuthRepository>().getUser();
+  void getUser() async {
+    final result = await sl<AuthRepository>().getUser();
     emit(ProfileState(result: result));
   }
 }

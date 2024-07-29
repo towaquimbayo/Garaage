@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,7 +19,7 @@ abstract class AuthFirebaseService {
 
   Future<Either> signOut();
 
-  Either getUser();
+  Future<Either> getUser();
 }
 
 class AuthFirebaseServiceImpl implements AuthFirebaseService {
@@ -149,20 +151,31 @@ class AuthFirebaseServiceImpl implements AuthFirebaseService {
   }
 
   @override
-  Either getUser() {
+  Future<Either> getUser() async {
     try {
       final currentFireBaseUser = FirebaseAuth.instance.currentUser;
       if (currentFireBaseUser == null) throw Exception("Current user is null");
-      final localUser = UserEntity(
-        firstName: currentFireBaseUser.displayName?.split(' ').first,
-        lastName: currentFireBaseUser.displayName?.split(' ').last,
-        email: currentFireBaseUser.email,
-        imageUrl: currentFireBaseUser.photoURL,
-      );
-      return Left(localUser);
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(currentFireBaseUser.uid)
+          .get();
+      if (userDoc.exists) {
+        final userData = userDoc.data() as Map<String, dynamic>;
+        final localUser = UserEntity(
+          firstName: userData['firstName'],
+          lastName: userData['lastName'],
+          email: userData['email'],
+          imageUrl: userData['imageUrl'],
+        );
+        return Left(localUser);
+      } else {
+        throw Exception("User doc does not exist");
+      }
     } catch (e) {
-      return Left(ServerFailure(
-          "error", 'An error occurred while getting user information.'));
+      return Right(
+        ServerFailure(
+            "error", 'An error occurred while getting user information.'),
+      );
     }
   }
 }
