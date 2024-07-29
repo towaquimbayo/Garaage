@@ -10,8 +10,8 @@ import '../../../core/config/theme/app_text.dart';
 import '../bloc/chatbot_cubit.dart';
 
 class ChatbotPage extends StatelessWidget {
+  static String routeName = '/chatbot';
   const ChatbotPage({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

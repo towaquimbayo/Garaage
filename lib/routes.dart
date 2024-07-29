@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'presentation/chatbot/pages/chatbot.dart';
 
 import 'presentation/ar_identify/pages/ar_identify.dart';
 import 'presentation/auth/pages/register.dart';
@@ -16,4 +17,5 @@ final Map<String, WidgetBuilder> routes = {
   NavigationPage.routeName: (context) => const NavigationPage(),
   ProfilePage.routeName: (context) => const ProfilePage(),
   ARIdentifyPage.routeName: (context) => const ARIdentifyPage(),
+  ChatbotPage.routeName: (context) => const ChatbotPage(),
 };
