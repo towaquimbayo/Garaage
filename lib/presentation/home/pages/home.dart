@@ -25,6 +25,7 @@ class _HomePageState extends State<HomePage> {
 
   // @TODO: Replace with DB / Bloc data
   Map<String, dynamic> vehicle = {
+    'status': 'Disconnected', // Connected / Disconnected
     'name': 'Honda Civic',
     'description': '2021 Sport Hybrid Edition',
     'image': Image.asset(
@@ -93,10 +94,13 @@ class _HomePageState extends State<HomePage> {
               errors: vehicle['errors'] as int,
               transmission: vehicle['transmission'] as String,
               numSeats: vehicle['numSeats'] as int,
+              status: vehicle['status'] as String,
             ),
             const SizedBox(height: 10),
             FuelConsumptionCard(
-              currentConsumed: vehicle['fuelConsumed'] as int,
+              currentConsumed: vehicle['status'] == 'Disconnected'
+                  ? 0
+                  : vehicle['fuelConsumed'] as int,
               totalConsumed: vehicle['totalFuel'] as int,
             ),
             const SizedBox(height: 10),
@@ -174,6 +178,7 @@ class VehicleCard extends StatelessWidget {
   final int errors;
   final String transmission;
   final int numSeats;
+  final String status;
 
   const VehicleCard({
     super.key,
@@ -183,6 +188,7 @@ class VehicleCard extends StatelessWidget {
     required this.errors,
     required this.transmission,
     required this.numSeats,
+    required this.status,
   });
 
   @override
@@ -268,7 +274,11 @@ class VehicleCard extends StatelessWidget {
                 ),
                 Container(
                   decoration: BoxDecoration(
-                    color: errors > 0 ? Colors.red[100] : Colors.green[50],
+                    color: status == 'Disconnected'
+                        ? AppColors.lightGrayMedium
+                        : errors > 0
+                            ? Colors.red[100]
+                            : Colors.green[50],
                     borderRadius: BorderRadius.circular(50),
                   ),
                   padding: const EdgeInsets.symmetric(
@@ -279,12 +289,16 @@ class VehicleCard extends StatelessWidget {
                     children: [
                       Icon(
                         Icons.circle,
-                        color: errors > 0 ? Colors.red : Colors.green,
+                        color: status == 'Disconnected'
+                            ? AppColors.darkGrayLightest
+                            : errors > 0
+                                ? Colors.red
+                                : Colors.green,
                         size: 10,
                       ),
                       const SizedBox(width: 10),
                       Text(
-                        '$errors Errors',
+                        status == 'Disconnected' ? status : '$errors Errors',
                         style: AppText.bodyS.copyWith(
                           color: AppColors.bodyText,
                           fontWeight: FontWeight.bold,
@@ -503,7 +517,7 @@ class VehicleStatsCard extends StatelessWidget {
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
