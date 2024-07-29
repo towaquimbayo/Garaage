@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../core/config/assets/app_images.dart';
 import '../../../common/widgets/my_app_bar.dart';
+import '../../../core/config/assets/app_icons.dart';
 import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_text.dart';
 
@@ -28,8 +30,9 @@ class _HomePageState extends State<HomePage> {
     'image': Image.asset(
       AppImages.hondaCivic,
       fit: BoxFit.contain,
-      height: 70,
     ),
+    'transmission': 'Auto',
+    'numSeats': 5,
     'errors': 0,
   };
 
@@ -78,6 +81,8 @@ class _HomePageState extends State<HomePage> {
           description: vehicle['description'] as String,
           image: vehicle['image'] as Widget,
           errors: vehicle['errors'] as int,
+          transmission: vehicle['transmission'] as String,
+          numSeats: vehicle['numSeats'] as int,
         ),
       ),
     );
@@ -89,6 +94,8 @@ class VehicleCard extends StatelessWidget {
   final String description;
   final Widget image;
   final int errors;
+  final String transmission;
+  final int numSeats;
 
   const VehicleCard({
     super.key,
@@ -96,6 +103,8 @@ class VehicleCard extends StatelessWidget {
     required this.description,
     required this.image,
     required this.errors,
+    required this.transmission,
+    required this.numSeats,
   });
 
   @override
@@ -126,28 +135,75 @@ class VehicleCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(width: 10),
-                image,
+                const SizedBox(width: 20),
+                Expanded(child: image),
               ],
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 20),
             Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                Row(
+                  children: [
+                    Row(
+                      children: [
+                        SvgPicture.asset(
+                          AppIcons.broken['transmission']!,
+                          width: 18,
+                          colorFilter: const ColorFilter.mode(
+                            AppColors.darkGrayLightest,
+                            BlendMode.srcIn,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          transmission,
+                          style: AppText.bodyS.copyWith(
+                            color: AppColors.darkGrayLightest,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(width: 15),
+                    Row(
+                      children: [
+                        SvgPicture.asset(
+                          AppIcons.broken['people']!,
+                          width: 18,
+                          colorFilter: const ColorFilter.mode(
+                            AppColors.darkGrayLightest,
+                            BlendMode.srcIn,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Text(
+                          '$numSeats Seats',
+                          style: AppText.bodyS.copyWith(
+                            color: AppColors.darkGrayLightest,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
                 Container(
                   decoration: BoxDecoration(
                     color: errors > 0 ? Colors.red[100] : Colors.green[50],
                     borderRadius: BorderRadius.circular(50),
                   ),
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 5,
+                    horizontal: 15,
+                    vertical: 10,
                   ),
                   child: Row(
                     children: [
-                      Icon(Icons.circle,
-                          color: errors > 0 ? Colors.red : Colors.green,
-                          size: 10),
+                      Icon(
+                        Icons.circle,
+                        color: errors > 0 ? Colors.red : Colors.green,
+                        size: 10,
+                      ),
                       const SizedBox(width: 10),
                       Text(
                         '$errors Errors',
