@@ -79,7 +79,7 @@ class _ChatbotState extends State<Chatbot> {
         final size = MediaQuery.of(context).size;
         final _sendMessage =
             BlocProvider.of<ChatbotCubit>(context).addChatMessage;
-        print(state.chatMessages);
+
         return SizedBox(
           height: size.height * 0.8,
           width: size.width,

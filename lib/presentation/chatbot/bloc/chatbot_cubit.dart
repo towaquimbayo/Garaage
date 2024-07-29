@@ -21,9 +21,7 @@ class ChatbotCubit extends Cubit<ChatbotState> {
 
   void addChatMessage(ChatMessage message) {
     final messages = state.chatMessages;
-    for (final messahe in state.chatMessages) {
-      print(messahe.text);
-    }
+    print(messages.length);
     emit(ChatbotState(
       chatMessages: [
         message,
@@ -44,7 +42,7 @@ class ChatbotCubit extends Cubit<ChatbotState> {
                   requestMessageText: question, images: images))
           .then((event) {
         event.fold(
-          (l) => _onSuccess(l, messages),
+          (l) => _onSuccess(l, state.chatMessages),
           (r) => _onFail(r),
         );
       });
@@ -77,6 +75,7 @@ class ChatbotCubit extends Cubit<ChatbotState> {
         user: geminiUser,
         createdAt: DateTime.now(),
         text: response,
+        isMarkdown: true,
       );
       final newState = [message, ...messages];
       emit(ChatbotState(chatMessages: newState));

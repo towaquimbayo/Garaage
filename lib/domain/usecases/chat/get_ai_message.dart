@@ -8,7 +8,6 @@ import '../../../service_locator.dart';
 class GetAiMessage extends UseCase<Either, AiMessageRequest> {
   @override
   Future<Either> call({AiMessageRequest? params}) async {
-    // TODO: implement call
     return sl<AiMessageRepository>().getAIMessage(params!);
   }
 }

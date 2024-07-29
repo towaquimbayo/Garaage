@@ -21,8 +21,15 @@ class AiMessageServiceImpl implements AiMessageService {
   Future<Either<AiMessageResponse, Failure>> sendAiMessage(
       AiMessageRequest aiMessageReq) async {
     try {
+      final imageParts = <DataPart>[];
+      if (aiMessageReq.images != null) {
+        aiMessageReq.images?.forEach((image) {
+          imageParts.add(DataPart('image/jpeg', image));
+        });
+      }
       final response = await model.generateContent([
-        Content.text(aiMessageReq.requestMessageText),
+        Content.multi(
+            [TextPart(aiMessageReq.requestMessageText), ...imageParts]),
       ]);
       return Left(AiMessageResponse(aiMessageResponseText: response.text!));
     } catch (e) {
