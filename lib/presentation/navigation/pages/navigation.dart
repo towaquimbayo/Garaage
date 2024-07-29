@@ -1,6 +1,5 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:garaage/core/config/theme/app_colors.dart';
 import 'package:garaage/presentation/chatbot/pages/chatbot.dart';
@@ -58,7 +57,7 @@ class NavigationPage extends StatelessWidget {
           TextButton(
             onPressed: () {
               Navigator.of(context).pop(true);
-              exit(0);
+              SystemNavigator.pop();
             },
             child: const Text('Yes'),
           ),
