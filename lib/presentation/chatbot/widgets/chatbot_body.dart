@@ -5,7 +5,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
-import '../../../core/config/theme/app_colors.dart';
 import '../bloc/chatbot_cubit.dart';
 
 class ChatbotBody extends StatefulWidget {

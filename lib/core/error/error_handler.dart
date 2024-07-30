@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:garaage/core/config/theme/app_colors.dart';
 
 import '../config/assets/app_icons.dart';
+import '../config/theme/app_colors.dart';
 import 'failures.dart';
 
 class ErrorHandler {

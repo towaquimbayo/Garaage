@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:garaage/presentation/chatbot/pages/chatbot.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../common/widgets/my_app_bar.dart';
 import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/assets/app_icons.dart';
 import '../../../core/config/theme/app_text.dart';
+import '../../chatbot/pages/chatbot.dart';
 
 class DiagnosticsPage extends StatefulWidget {
   const DiagnosticsPage({super.key});
