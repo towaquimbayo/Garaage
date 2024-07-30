@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:garaage/core/config/theme/app_colors.dart';
-import 'package:garaage/presentation/chatbot/pages/chatbot.dart';
 
 import '../../../common/widgets/my_bottom_nav_bar.dart';
+import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_text.dart';
 import '../../diagnostics/pages/diagnostics.dart';
 import '../../home/pages/home.dart';
@@ -72,8 +71,6 @@ class NavigationPage extends StatelessWidget {
         return const HomePage();
       case NavBarItem.diagnostics:
         return const DiagnosticsPage();
-      case NavBarItem.chatbot:
-        return const ChatbotPage();
       default:
         return const HomePage();
     }

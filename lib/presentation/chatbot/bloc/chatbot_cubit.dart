@@ -4,10 +4,10 @@ import 'dart:typed_data';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dash_chat_2/dash_chat_2.dart';
-import 'package:garaage/data/models/chat/ai_message_request.dart';
-import 'package:garaage/data/models/chat/ai_message_response.dart';
-import 'package:garaage/domain/usecases/chat/get_ai_message.dart';
 
+import '../../../data/models/chat/ai_message_request.dart';
+import '../../../data/models/chat/ai_message_response.dart';
+import '../../../domain/usecases/chat/get_ai_message.dart';
 import '../../../service_locator.dart';
 
 part 'chatbot_state.dart';
@@ -17,7 +17,7 @@ class ChatbotCubit extends Cubit<ChatbotState> {
   final gemini = sl<GetAiMessage>();
 
   ChatUser currentUser = ChatUser(id: "0", firstName: "User");
-  ChatUser geminiUser = ChatUser(id: "1", firstName: "Gemini");
+  ChatUser geminiUser = ChatUser(id: "1", firstName: "Mika");
 
   void addChatMessage(ChatMessage message) {
     final messages = state.chatMessages;

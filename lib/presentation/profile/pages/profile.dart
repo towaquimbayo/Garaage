@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:garaage/core/error/error_handler.dart';
-import 'package:garaage/domain/entities/user.dart';
-import 'package:garaage/presentation/profile/bloc/profile_cubit.dart';
 
 import '../../../common/widgets/my_app_bar.dart';
 import '../../../core/config/assets/app_icons.dart';
 import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_text.dart';
+import '../../../core/error/error_handler.dart';
+import '../../../domain/entities/user.dart';
+import '../bloc/profile_cubit.dart';
 
 class ProfilePage extends StatelessWidget {
   static String routeName = '/profile';
@@ -30,6 +30,7 @@ class ProfilePage extends StatelessWidget {
             });
           },
         );
+        
         return Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: MyAppBar(
@@ -51,6 +52,7 @@ class ProfilePage extends StatelessWidget {
   Widget _buildUI(BuildContext context, UserEntity? user) {
     final double screenHeight = MediaQuery.of(context).size.height;
     final double keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+
     return SizedBox(
       height: screenHeight - keyboardHeight,
       child: SingleChildScrollView(

@@ -102,11 +102,12 @@ class MyBottomNavBar extends StatelessWidget {
                 height: 4,
                 width: 32,
                 decoration: const BoxDecoration(
-                    color: AppColors.primary,
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(10),
-                      bottomRight: Radius.circular(10),
-                    )),
+                  color: AppColors.primary,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(10),
+                    bottomRight: Radius.circular(10),
+                  )
+                ),
               ),
             ),
           ],
@@ -144,8 +145,7 @@ class MyBottomNavBar extends StatelessWidget {
             .getNavBarItem(NavBarItem.diagnostics);
         break;
       case 2:
-        BlocProvider.of<NavigationCubit>(context)
-            .getNavBarItem(NavBarItem.chatbot);
+        Navigator.of(context).pushNamed(ChatbotPage.routeName);
         break;
       case 3:
         Navigator.of(context).pushNamed(ARIdentifyPage.routeName);

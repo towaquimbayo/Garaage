@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:garaage/domain/entities/user.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../core/error/failures.dart';
+import '../../domain/entities/user.dart';
 import '../models/auth/create_user_req.dart';
 import '../models/auth/sign_in_user_req.dart';
 
@@ -19,7 +19,7 @@ abstract class AuthFirebaseService {
 
   Future<Either> signOut();
 
-  Future<Either> getUser();
+  Future<Either> getCurrentUser();
 }
 
 class AuthFirebaseServiceImpl implements AuthFirebaseService {
@@ -92,8 +92,7 @@ class AuthFirebaseServiceImpl implements AuthFirebaseService {
   Future<Either> signInWithGoogle() async {
     try {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-      if (googleUser == null)
-        throw FirebaseAuthException(code: 'google-sign-in-failed');
+      if (googleUser == null) throw FirebaseAuthException(code: 'google-sign-in-failed');
 
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
@@ -107,8 +106,6 @@ class AuthFirebaseServiceImpl implements AuthFirebaseService {
 
       // Save user data to Firestore if it's a new user
       if (userCredential.additionalUserInfo?.isNewUser ?? false) {
-        print("User_______________________");
-        print(userCredential.user);
         await FirebaseFirestore.instance
             .collection('Users')
             .doc(userCredential.user?.uid)
@@ -151,7 +148,7 @@ class AuthFirebaseServiceImpl implements AuthFirebaseService {
   }
 
   @override
-  Future<Either> getUser() async {
+  Future<Either> getCurrentUser() async {
     try {
       final currentFireBaseUser = FirebaseAuth.instance.currentUser;
       if (currentFireBaseUser == null) throw Exception("Current user is null");

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'presentation/chatbot/pages/chatbot.dart';
 
 import 'presentation/ar_identify/pages/ar_identify.dart';
 import 'presentation/auth/pages/register.dart';
 import 'presentation/auth/pages/sign_in.dart';
+import 'presentation/chatbot/pages/chatbot.dart';
 import 'presentation/connect/pages/connect.dart';
 import 'presentation/navigation/pages/navigation.dart';
 import 'presentation/onboarding/pages/onboarding.dart';

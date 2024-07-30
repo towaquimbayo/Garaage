@@ -2,18 +2,16 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:garaage/presentation/chatbot/bloc/chatbot_cubit.dart';
-import 'package:garaage/presentation/profile/bloc/profile_cubit.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'conts.dart';
 import 'core/config/theme/app_theme.dart';
 import 'firebase_options.dart';
+import 'presentation/chatbot/bloc/chatbot_cubit.dart';
 import 'presentation/navigation/bloc/navigation_cubit.dart';
 import 'presentation/onboarding/pages/onboarding.dart';
+import 'presentation/profile/bloc/profile_cubit.dart';
 import 'presentation/splash/bloc/splash_cubit.dart';
 import 'routes.dart';
 import 'service_locator.dart';
@@ -50,10 +48,10 @@ class MyApp extends StatelessWidget {
         BlocProvider<NavigationCubit>(
           create: (BuildContext context) => NavigationCubit(),
         ),
-        BlocProvider(
+        BlocProvider<ChatbotCubit>(
           create: (BuildContext context) => ChatbotCubit(),
         ),
-        BlocProvider(
+        BlocProvider<ProfileCubit>(
           create: (context) => ProfileCubit(),
         ),
       ],

@@ -1,9 +1,10 @@
 import 'package:dartz/dartz.dart';
-import 'package:garaage/conts.dart';
-import 'package:garaage/core/error/failures.dart';
-import 'package:garaage/data/models/chat/ai_message_request.dart';
-import 'package:garaage/data/models/chat/ai_message_response.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
+
+import '../../conts.dart';
+import '../../core/error/failures.dart';
+import '../models/chat/ai_message_request.dart';
+import '../models/chat/ai_message_response.dart';
 
 abstract class AiMessageService {
   Future<Either> sendAiMessage(AiMessageRequest aiMessageReq);
