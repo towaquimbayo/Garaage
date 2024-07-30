@@ -2,10 +2,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:garaage/presentation/chatbot/bloc/chatbot_cubit.dart';
+import 'package:garaage/presentation/profile/bloc/profile_cubit.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'conts.dart';
 import 'core/config/theme/app_theme.dart';
 import 'firebase_options.dart';
 import 'presentation/navigation/bloc/navigation_cubit.dart';
@@ -17,7 +21,7 @@ import 'service_locator.dart';
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  
+
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: kIsWeb
         ? HydratedStorage.webStorageDirectory
@@ -45,6 +49,12 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<NavigationCubit>(
           create: (BuildContext context) => NavigationCubit(),
+        ),
+        BlocProvider(
+          create: (BuildContext context) => ChatbotCubit(),
+        ),
+        BlocProvider(
+          create: (context) => ProfileCubit(),
         ),
       ],
       child: BlocListener<SplashCubit, bool>(

@@ -8,5 +8,5 @@ abstract class AuthRepository {
   Future<Either> register(CreateUserReq createUserReq);
   Future<Either> signInWithGoogle();
   Future<Either> signOut();
-  // Future<Either> getCurrentUser();
+  Future<Either> getUser();
 }

@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:garaage/domain/entities/user.dart';
+import 'package:garaage/presentation/profile/bloc/profile_cubit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../core/config/assets/app_images.dart';
@@ -8,6 +11,7 @@ import '../../../common/widgets/my_app_bar.dart';
 import '../../../core/config/assets/app_icons.dart';
 import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_text.dart';
+import '../../../core/error/error_handler.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,12 +21,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final FirebaseFirestore _db = FirebaseFirestore.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  User? user;
-  String? uid;
-  String firstname = '';
-
   // @TODO: Replace with DB / Bloc data
   Map<String, dynamic> vehicle = {
     'status': 'Disconnected', // Connected / Disconnected
@@ -45,42 +43,37 @@ class _HomePageState extends State<HomePage> {
     'coolantDesired': 120,
   };
 
-  @override
-  void initState() {
-    super.initState();
-    user = _auth.currentUser;
-    uid = user?.uid;
-    if (uid != null) _getUserData();
-  }
-
   // Get user data from Firestore
-  void _getUserData() async {
-    try {
-      // @TODO: Replace with actual document ID
-      DocumentSnapshot userDoc =
-          await _db.collection('Users').doc('kXuoDoi8vO0jLUBOMhfO').get();
-      if (userDoc.exists) {
-        Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
-        setState(() {
-          print("Firestore UserData: $userData\n");
-          firstname = userData['firstName'] as String;
-        });
-      } else {
-        print('User Document does not exist');
-      }
-    } catch (e) {
-      print('Error getting user data from Firestore: $e');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
+    context.read<ProfileCubit>().getUser();
     return Scaffold(
       appBar: MyAppBar(
         actions: true,
-        title: Text(
-          'Welcome $firstname',
-          style: AppText.pageTitleText.copyWith(color: AppColors.headingText),
+        title: BlocBuilder<ProfileCubit, ProfileState>(
+          builder: (context, state) {
+            UserEntity? user;
+            state.result?.fold(
+              (l) {
+                user = l;
+              },
+              (r) {
+                Future(() {
+                  ErrorHandler.handleError(context, r);
+                });
+              },
+            );
+            String? firstName;
+            if (user != null) {
+              firstName = user?.firstName;
+            }
+            return Text(
+              'Welcome $firstName',
+              style:
+                  AppText.pageTitleText.copyWith(color: AppColors.headingText),
+            );
+          },
         ),
       ),
       body: SingleChildScrollView(
