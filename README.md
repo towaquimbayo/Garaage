@@ -2,7 +2,7 @@
 
 # garaage
 
-<!-- ![Garaage Thumbnail](screenshots/garaage-thumbnail.jpg) -->
+![Garaage Thumbnail](screenshots/garaage-thumbnail.jpg)
 
 A mobile application developed with Flutter, Google Gemini API, and Google ARCore, designed to revolutionize vehicle diagnostics and maintenance. By leveraging an OBD2 (On-board diagnostics) scanner, the app provides detailed diagnostic reports and maintenance recommendations, ensuring users can efficiently manage their vehicle's health. This project was developed for the Google Gemini API Developer Competition 2024, showcasing the integration of advanced Google technologies.
 
