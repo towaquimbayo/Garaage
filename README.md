@@ -4,7 +4,7 @@
 
 <!-- ![Garaage Thumbnail](screenshots/garaage-thumbnail.jpg) -->
 
-A mobile application developed with Flutter, Google Gemini API, and Google ARCore, designed to revolutionize vehicle diagnostics and maintenance. By leveraging an OBD2 (On-board diagnostics) scanner, the app provides detailed diagnostic reports and maintenance recommendations, ensuring users can efficiently manage their vehicle's health. This project was developed for the Google Gemini API Developer Competition 2024, showcasing the integration of advanced Google's technologies.
+A mobile application developed with Flutter, Google Gemini API, and Google ARCore, designed to revolutionize vehicle diagnostics and maintenance. By leveraging an OBD2 (On-board diagnostics) scanner, the app provides detailed diagnostic reports and maintenance recommendations, ensuring users can efficiently manage their vehicle's health. This project was developed for the Google Gemini API Developer Competition 2024, showcasing the integration of advanced Google technologies.
 
 _Check out the Figma high fidelity prototype designs [_here_](https://www.figma.com/design/YdUcQaqNCCKZ5ZTA5HZhlf/garaage?node-id=1-2&t=5zR3jATXVg4i26S8-1)._
 
@@ -121,7 +121,7 @@ Enhancing vehicle management with advanced diagnostics and maintenance recommend
 
 ### Real-time Vehicle Information
 
-Access real-time vehicle information and statistics to monitor your vehicle's health, conbdition, and performance. The app provides detailed insights into your vehicle's status, including fuel consumption, engine temperature, battery voltage, and more.
+Access real-time vehicle information and statistics to monitor your vehicle's health, condition, and performance. The app provides detailed insights into your vehicle's status, including fuel consumption, engine temperature, battery voltage, and more.
 
 * __Dashboard__: View essential vehicle information and key metrics such as fuel consumption, mileage, battery voltage, RPM, engine temperature, and more.
 * __Bluetooth Connection__: Seamlessly connect to the OBD2 scanner using your phone's Bluetooth to retrieve and access real-time vehicle information and statistics. The app uses the OBD2 scanner to communicate with your vehicle and retrieve data.
