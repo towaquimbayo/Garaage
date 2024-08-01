@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
                 });
               },
             );
-            String? firstName;
+            String? firstName = "";
             if (user != null) {
               firstName = user?.firstName;
             }
