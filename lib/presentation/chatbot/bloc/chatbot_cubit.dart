@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dash_chat_2/dash_chat_2.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../data/models/chat/ai_message_request.dart';
 import '../../../data/models/chat/ai_message_response.dart';
@@ -19,7 +20,9 @@ class ChatbotCubit extends Cubit<ChatbotState> {
   ChatUser currentUser = ChatUser(id: "0", firstName: "User");
   ChatUser geminiUser = ChatUser(id: "1", firstName: "Mika");
 
-  void addChatMessage(ChatMessage message) {
+  void addChatMessage(
+    ChatMessage message,
+  ) {
     final messages = state.chatMessages;
     print(messages.length);
     emit(ChatbotState(
@@ -32,9 +35,9 @@ class ChatbotCubit extends Cubit<ChatbotState> {
       String question = message.text;
       List<Uint8List>? images;
       if (message.medias?.isNotEmpty ?? false) {
-        images = [
-          File(message.medias!.first.url).readAsBytesSync(),
-        ];
+        images = message.medias!
+            .map((file) => File(file.url).readAsBytesSync())
+            .toList();
       }
       gemini
           .call(
