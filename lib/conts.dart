@@ -1,2 +1,2 @@
 /// Add API key
-const String GEMINI_API_KEY = "";
+const String GEMINI_API_KEY = "AIzaSyCJ1EK43d1McDyiGyySPbM5U_5TB7OZ5WA";
