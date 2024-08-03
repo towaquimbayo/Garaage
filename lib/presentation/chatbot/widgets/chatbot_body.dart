@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,6 +10,7 @@ import 'package:speech_to_text/speech_to_text.dart';
 
 import '../../../core/config/assets/app_icons.dart';
 import '../../../core/config/theme/app_colors.dart';
+import '../../camera/widgets/camera_body.dart';
 import '../bloc/chatbot_cubit.dart';
 
 class ChatbotBody extends StatefulWidget {
@@ -26,11 +28,26 @@ class _ChatbotBodyState extends State<ChatbotBody> {
   ChatUser currentUser = ChatUser(id: "0", firstName: "User");
   ChatUser geminiUser = ChatUser(id: "1", firstName: "Mika");
   final imagesPicked = <XFile?>[];
+  late List<CameraDescription> cameras;
+  late CameraDescription camera;
 
   @override
   void initState() {
     super.initState();
     initSpeech();
+    initCamera();
+  }
+
+  void initCamera() {
+    try {
+      availableCameras().then((availableCameras) {
+        cameras = availableCameras;
+        camera = cameras.first;
+        print(cameras);
+      });
+    } on CameraException catch (e) {
+      print(e);
+    }
   }
 
   void initSpeech() async {
@@ -74,7 +91,7 @@ class _ChatbotBodyState extends State<ChatbotBody> {
               child: _buildUI(state, sendMessage),
             ),
             SelectedImages(
-              selectedImages: imagesPicked,
+              pickedImages: imagesPicked,
               size: imagesPicked.isNotEmpty ? selectedImagesSize : 0,
               removeImage: (index) {
                 setState(() {
@@ -124,6 +141,32 @@ class _ChatbotBodyState extends State<ChatbotBody> {
                 ),
               ),
           ]),
+          IconButton(
+            padding: EdgeInsets.all(0),
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => CameraPageBody(
+                      camera: camera,
+                      addImage: (xFile) {
+                        setState(
+                          () {
+                            imagesPicked.add(xFile);
+                          },
+                        );
+                      },
+                    ),
+                  ));
+            },
+            icon: SvgPicture.asset(
+              AppIcons.broken['camera']!,
+              colorFilter: const ColorFilter.mode(
+                AppColors.darkGrayDarkest,
+                BlendMode.srcIn,
+              ),
+            ),
+          ),
         ], trailing: [
           IconButton(
               onPressed:
