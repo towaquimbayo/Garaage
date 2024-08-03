@@ -78,7 +78,7 @@ class SelectedImages extends StatelessWidget {
                               removeImage(index);
                             },
                             child: SvgPicture.asset(
-                              AppIcons.bold['close']!,
+                              AppIcons.bold['close-circle']!,
                               colorFilter: const ColorFilter.mode(
                                 AppColors.warningDark,
                                 BlendMode.srcIn,
