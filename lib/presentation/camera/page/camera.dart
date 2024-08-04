@@ -20,7 +20,6 @@ class CameraPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: MyAppBar(
-        actions: true,
         leading: true,
         title: Text(
           'Camera',

@@ -24,7 +24,7 @@ class _CameraPageBodyState extends State<CameraPageBody> {
     super.initState();
     _cameraController = CameraController(
       widget.camera,
-      ResolutionPreset.medium,
+      ResolutionPreset.max,
     );
     _initializeControllerFuture = _cameraController.initialize();
   }

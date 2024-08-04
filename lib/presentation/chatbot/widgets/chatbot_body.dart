@@ -10,6 +10,7 @@ import 'package:speech_to_text/speech_to_text.dart';
 
 import '../../../core/config/assets/app_icons.dart';
 import '../../../core/config/theme/app_colors.dart';
+import '../../camera/page/camera.dart';
 import '../../camera/widgets/camera_body.dart';
 import '../bloc/chatbot_cubit.dart';
 
@@ -147,7 +148,7 @@ class _ChatbotBodyState extends State<ChatbotBody> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => CameraPageBody(
+                    builder: (_) => CameraPage(
                       camera: camera,
                       addImage: (xFile) {
                         setState(

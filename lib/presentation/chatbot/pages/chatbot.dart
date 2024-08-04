@@ -20,8 +20,11 @@ class ChatbotPage extends StatelessWidget {
           style: AppText.pageTitleText.copyWith(color: AppColors.headingText),
         ),
       ),
-      body: const Center(
-        child: ChatbotBody(),
+      body: const SingleChildScrollView(
+        physics: NeverScrollableScrollPhysics(),
+        child: Center(
+          child: ChatbotBody(),
+        ),
       ),
     );
   }
