@@ -26,8 +26,6 @@ class _ChatbotBodyState extends State<ChatbotBody> {
   final SpeechToText _speechToText = SpeechToText();
   bool _speechEnabled = false;
   List<ChatMessage> messages = [];
-  ChatUser currentUser = ChatUser(id: "0", firstName: "User");
-  ChatUser geminiUser = ChatUser(id: "1", firstName: "Mika");
   final imagesPicked = <XFile?>[];
   late List<CameraDescription> cameras;
   late CameraDescription camera;
@@ -112,90 +110,96 @@ class _ChatbotBodyState extends State<ChatbotBody> {
   ) {
     print(imagesPicked.length);
     return DashChat(
-        inputOptions: InputOptions(leading: [
-          Stack(children: [
-            IconButton(
-              onPressed: () {
-                // _sendMediaMessage(sendMessage);
-                _pickImages();
-              },
-              icon: SvgPicture.asset(
-                AppIcons.broken['gallery']!,
-                colorFilter: const ColorFilter.mode(
-                  AppColors.darkGrayDarkest,
-                  BlendMode.srcIn,
-                ),
-              ),
-            ),
-            if (imagesPicked.isNotEmpty)
-              Positioned(
-                child: CircleAvatar(
-                  radius: 8,
-                  backgroundColor: Colors.red,
-                  child: Text(
-                    "${imagesPicked.length}",
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 10,
-                    ),
-                  ),
-                ),
-              ),
-          ]),
+      inputOptions: InputOptions(leading: [
+        Stack(children: [
           IconButton(
-            padding: EdgeInsets.all(0),
             onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => CameraPage(
-                      camera: camera,
-                      addImage: (xFile) {
-                        setState(
-                          () {
-                            imagesPicked.add(xFile);
-                          },
-                        );
-                      },
-                    ),
-                  ));
+              // _sendMediaMessage(sendMessage);
+              _pickImages();
             },
             icon: SvgPicture.asset(
-              AppIcons.broken['camera']!,
+              AppIcons.broken['gallery']!,
               colorFilter: const ColorFilter.mode(
                 AppColors.darkGrayDarkest,
                 BlendMode.srcIn,
               ),
             ),
           ),
-        ], trailing: [
-          IconButton(
-              onPressed:
-                  _speechToText.isListening ? _stopListening : _startListening,
-              icon: _speechToText.isListening
-                  ? CircleAvatar(
-                      backgroundColor: AppColors.darkGrayLightest,
-                      child: SvgPicture.asset(
-                        AppIcons.broken['microphone']!,
-                        colorFilter: const ColorFilter.mode(
-                          AppColors.lightGrayLightest,
-                          BlendMode.srcIn,
-                        ),
-                      ),
-                    )
-                  : SvgPicture.asset(
+          if (imagesPicked.isNotEmpty)
+            Positioned(
+              child: CircleAvatar(
+                radius: 8,
+                backgroundColor: Colors.red,
+                child: Text(
+                  "${imagesPicked.length}",
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 10,
+                  ),
+                ),
+              ),
+            ),
+        ]),
+        IconButton(
+          padding: EdgeInsets.all(0),
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => CameraPage(
+                    camera: camera,
+                    addImage: (xFile) {
+                      setState(
+                        () {
+                          imagesPicked.add(xFile);
+                        },
+                      );
+                    },
+                  ),
+                ));
+          },
+          icon: SvgPicture.asset(
+            AppIcons.broken['camera']!,
+            colorFilter: const ColorFilter.mode(
+              AppColors.darkGrayDarkest,
+              BlendMode.srcIn,
+            ),
+          ),
+        ),
+      ], trailing: [
+        IconButton(
+            onPressed:
+                _speechToText.isListening ? _stopListening : _startListening,
+            icon: _speechToText.isListening
+                ? CircleAvatar(
+                    backgroundColor: AppColors.darkGrayLightest,
+                    child: SvgPicture.asset(
                       AppIcons.broken['microphone']!,
                       colorFilter: const ColorFilter.mode(
-                        AppColors.darkGrayDarkest,
+                        AppColors.lightGrayLightest,
                         BlendMode.srcIn,
                       ),
-                    )),
-        ], textController: _controller),
-        currentUser: currentUser,
-        onSend: (chatMessage) {
-          _sendMediaMessage(sendMessage, chatMessage);
-        },
-        messages: chatBotState.chatMessages);
+                    ),
+                  )
+                : SvgPicture.asset(
+                    AppIcons.broken['microphone']!,
+                    colorFilter: const ColorFilter.mode(
+                      AppColors.darkGrayDarkest,
+                      BlendMode.srcIn,
+                    ),
+                  )),
+      ], textController: _controller),
+      currentUser: ChatbotState.currentUser,
+      onSend: (chatMessage) {
+        _sendMediaMessage(sendMessage, chatMessage);
+      },
+      messages: chatBotState.chatMessages,
+      typingUsers: [
+        if (chatBotState.chatMessages.isNotEmpty &&
+            chatBotState.chatMessages.first.user != ChatbotState.geminiUser)
+          ChatbotState.geminiUser,
+      ],
+    );
   }
 
   void _pickImages() async {
