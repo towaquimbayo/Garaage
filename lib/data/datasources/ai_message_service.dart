@@ -28,10 +28,23 @@ class AiMessageServiceImpl implements AiMessageService {
           imageParts.add(DataPart('image/jpeg', image));
         });
       }
-      final response = await model.generateContent([
+      final chatHistory = aiMessageReq.chatHistory.map((message) {
+        return Content(
+          message.user.firstName == 'Mike' ? 'model' : 'user',
+          [
+            TextPart(
+              message.text,
+            ),
+          ],
+        );
+      }).toList();
+      final chat = model.startChat(
+        history: chatHistory,
+      );
+      final response = await chat.sendMessage(
         Content.multi(
             [TextPart(aiMessageReq.requestMessageText), ...imageParts]),
-      ]);
+      );
       return Left(AiMessageResponse(aiMessageResponseText: response.text!));
     } catch (e) {
       Failure failure = ServerFailure(
