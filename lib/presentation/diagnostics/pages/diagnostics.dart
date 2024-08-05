@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:garaage/presentation/chatbot/bloc/chatbot_cubit.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../common/widgets/my_app_bar.dart';
@@ -77,6 +79,7 @@ class DiagnosticsPage extends StatefulWidget {
       ],
     },
   ];
+
   // static final errorCodes = [];
 
   @override
@@ -184,7 +187,9 @@ class _DiagnosticsPageState extends State<DiagnosticsPage> {
                 const SizedBox(height: 10),
                 ErrorCodePanel(error: Error.fromMap(selectedError)),
                 const SizedBox(height: 20),
-                const Chatbot(),
+                Chatbot(
+                  selectedError: selectedError,
+                ),
               ]),
       ),
     );
@@ -192,7 +197,9 @@ class _DiagnosticsPageState extends State<DiagnosticsPage> {
 }
 
 class Chatbot extends StatelessWidget {
-  const Chatbot({super.key});
+  const Chatbot({required this.selectedError, super.key});
+
+  final Map<String, Object> selectedError;
 
   @override
   Widget build(BuildContext context) {
@@ -239,6 +246,9 @@ class Chatbot extends StatelessWidget {
             children: [
               ElevatedButton(
                 onPressed: () {
+                  context
+                      .read<ChatbotCubit>()
+                      .startDiagnosticChat(selectedError);
                   Navigator.of(context).pushNamed(ChatbotPage.routeName);
                 },
                 style: ElevatedButton.styleFrom(
