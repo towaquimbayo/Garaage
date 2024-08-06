@@ -13,6 +13,7 @@ class ChatbotPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: MyAppBar(
         leading: true,
         title: Text(
@@ -21,7 +22,6 @@ class ChatbotPage extends StatelessWidget {
         ),
       ),
       body: const SingleChildScrollView(
-        physics: NeverScrollableScrollPhysics(),
         child: Center(
           child: ChatbotBody(),
         ),
