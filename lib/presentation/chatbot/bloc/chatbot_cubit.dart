@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:dartz/dartz.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:garaage/core/error/failures.dart';
@@ -136,6 +135,19 @@ class ChatbotCubit extends Cubit<ChatbotState> {
       emit(ChatbotState(chatMessages: newState));
     }
   }
-}
 
-void _onFail(Failure l) {}
+  // TODO: implement something for failure
+  void _onFail(Failure l) {
+    const response =
+        "There seems to be a Server Error. Please start a new chat";
+    ChatMessage message = ChatMessage(
+      user: ChatbotState.geminiUser,
+      createdAt: DateTime.now(),
+      text: response,
+      isMarkdown: true,
+    );
+    final newState = [message, ...state.chatMessages];
+    emit(ChatbotState(chatMessages: newState));
+    print(l);
+  }
+}
