@@ -21,8 +21,6 @@ class ChatbotBody extends StatefulWidget {
   State<ChatbotBody> createState() => _ChatbotBodyState();
 }
 
-// TODO: Fix chat covering search box and mic enlarging issue
-
 class _ChatbotBodyState extends State<ChatbotBody> {
   final TextEditingController _controller = TextEditingController();
   final SpeechToText _speechToText = SpeechToText();
