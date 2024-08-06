@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:garaage/presentation/chatbot/widgets/new_chat.dart';
 
 import '../../../common/widgets/my_app_bar.dart';
 import '../../../core/config/theme/app_colors.dart';
@@ -16,6 +17,7 @@ class ChatbotPage extends StatelessWidget {
       resizeToAvoidBottomInset: true,
       appBar: MyAppBar(
         leading: true,
+        newChat: const NewChat(),
         title: Text(
           'Mika AI',
           style: AppText.pageTitleText.copyWith(color: AppColors.headingText),
