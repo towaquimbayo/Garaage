@@ -20,6 +20,8 @@ abstract class AuthFirebaseService {
   Future<Either> signOut();
 
   Future<Either> getCurrentUser();
+
+  Future<Either> checkUserHasCars();
 }
 
 class AuthFirebaseServiceImpl implements AuthFirebaseService {
@@ -172,6 +174,31 @@ class AuthFirebaseServiceImpl implements AuthFirebaseService {
       return Right(
         ServerFailure(
             "error", 'An error occurred while getting user information.'),
+      );
+    }
+  }
+  
+  @override
+  Future<Either> checkUserHasCars() async {
+    try {
+      final currentFireBaseUser = FirebaseAuth.instance.currentUser;
+      if (currentFireBaseUser == null) throw Exception("Current user is null");
+      return FirebaseFirestore.instance
+          .collection('Users')
+          .doc(currentFireBaseUser.uid)
+          .collection('Vehicles')
+          .get()
+          .then((value) {
+            if (value.docs.isNotEmpty) {
+              return const Left(true);
+            } else {
+              return const Left(false);
+            }
+          });
+    } catch (e) {
+      return Right(
+        ServerFailure(
+            "error", 'An error occurred while checking if user has cars.'),
       );
     }
   }

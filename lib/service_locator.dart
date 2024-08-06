@@ -6,6 +6,7 @@ import 'data/repositories/ai_message_repository_impl.dart';
 import 'data/repositories/auth_repository_impl.dart';
 import 'domain/repositories/ai_message.dart';
 import 'domain/repositories/auth.dart';
+import 'domain/usecases/auth/check_user_has_cars.dart';
 import 'domain/usecases/auth/register.dart';
 import 'domain/usecases/auth/sign_in.dart';
 import 'domain/usecases/auth/sign_in_with_google.dart';
@@ -22,6 +23,7 @@ Future<void> initializeDependencies() async {
   sl.registerSingleton<SignInUseCase>(SignInUseCase());
   sl.registerSingleton<SignInWithGoogleUseCase>(SignInWithGoogleUseCase());
   sl.registerSingleton<SignOutUseCase>(SignOutUseCase());
+  sl.registerSingleton<CheckUserHasCarsUseCase>(CheckUserHasCarsUseCase());
 
   // Chat services
   sl.registerSingleton<AiMessageService>(AiMessageServiceImpl());
