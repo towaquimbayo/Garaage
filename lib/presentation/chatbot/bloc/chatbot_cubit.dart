@@ -13,7 +13,13 @@ import '../../../service_locator.dart';
 part 'chatbot_state.dart';
 
 class ChatbotCubit extends Cubit<ChatbotState> {
-  ChatbotCubit() : super(ChatbotState(chatMessages: []));
+  ChatbotCubit()
+      : super(
+          ChatbotState(
+            chatMessages: [],
+            aiTyping: false,
+          ),
+        );
   final gemini = sl<GetAiMessage>();
 
   void addChatMessage(
@@ -21,12 +27,10 @@ class ChatbotCubit extends Cubit<ChatbotState> {
   ) {
     final messages = state.chatMessages;
     print(messages.length);
-    emit(ChatbotState(
-      chatMessages: [
-        message,
-        ...messages,
-      ],
-    ));
+    emit(ChatbotState(chatMessages: [
+      message,
+      ...messages,
+    ], aiTyping: true));
     try {
       String question = message.text;
       List<Uint8List>? images;
@@ -51,18 +55,21 @@ class ChatbotCubit extends Cubit<ChatbotState> {
         );
       });
     } catch (e) {
+      emit(
+        ChatbotState(chatMessages: [
+          message,
+          ...messages,
+        ], aiTyping: false),
+      );
       print(e);
     }
   }
 
   void startDiagnosticChat(Map<String, Object> diagnosticIssue) {
-    print(diagnosticIssue);
-    final initialChatMessages =
+    List<ChatMessage> initialChatMessages =
         getInitialDiagnosticMessages(diagnosticIssue['code'] as String);
     emit(
-      ChatbotState(
-        chatMessages: initialChatMessages,
-      ),
+      ChatbotState(chatMessages: initialChatMessages, aiTyping: true),
     );
     try {
       gemini
@@ -81,6 +88,9 @@ class ChatbotCubit extends Cubit<ChatbotState> {
         );
       });
     } catch (e) {
+      emit(
+        ChatbotState(chatMessages: initialChatMessages, aiTyping: false),
+      );
       print(e);
     }
   }
@@ -99,9 +109,7 @@ class ChatbotCubit extends Cubit<ChatbotState> {
 
   void startNewChat() {
     emit(
-      ChatbotState(
-        chatMessages: [],
-      ),
+      ChatbotState(chatMessages: [], aiTyping: false),
     );
   }
 
@@ -118,7 +126,7 @@ class ChatbotCubit extends Cubit<ChatbotState> {
         lastMessage,
         ...messages,
       ];
-      emit(ChatbotState(chatMessages: newState));
+      emit(ChatbotState(chatMessages: newState, aiTyping: false));
     } else {
       // String response = event.content?.parts?.fold(
       //     "", (previous, current) => "$previous ${current.text}") ??
@@ -132,7 +140,7 @@ class ChatbotCubit extends Cubit<ChatbotState> {
         isMarkdown: true,
       );
       final newState = [message, ...messages];
-      emit(ChatbotState(chatMessages: newState));
+      emit(ChatbotState(chatMessages: newState, aiTyping: false));
     }
   }
 
@@ -147,7 +155,7 @@ class ChatbotCubit extends Cubit<ChatbotState> {
       isMarkdown: true,
     );
     final newState = [message, ...state.chatMessages];
-    emit(ChatbotState(chatMessages: newState));
+    emit(ChatbotState(chatMessages: newState, aiTyping: false));
     print(l);
   }
 }
