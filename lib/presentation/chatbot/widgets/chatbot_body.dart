@@ -21,6 +21,8 @@ class ChatbotBody extends StatefulWidget {
   State<ChatbotBody> createState() => _ChatbotBodyState();
 }
 
+// TODO: Fix chat covering search box and mic enlarging issue
+
 class _ChatbotBodyState extends State<ChatbotBody> {
   final TextEditingController _controller = TextEditingController();
   final SpeechToText _speechToText = SpeechToText();
@@ -167,27 +169,28 @@ class _ChatbotBodyState extends State<ChatbotBody> {
           ),
         ),
       ], trailing: [
-        IconButton(
-            onPressed:
-                _speechToText.isListening ? _stopListening : _startListening,
-            icon: _speechToText.isListening
-                ? CircleAvatar(
-                    backgroundColor: AppColors.darkGrayLightest,
-                    child: SvgPicture.asset(
-                      AppIcons.broken['microphone']!,
-                      colorFilter: const ColorFilter.mode(
-                        AppColors.lightGrayLightest,
-                        BlendMode.srcIn,
-                      ),
-                    ),
-                  )
-                : SvgPicture.asset(
-                    AppIcons.broken['microphone']!,
-                    colorFilter: const ColorFilter.mode(
-                      AppColors.darkGrayDarkest,
-                      BlendMode.srcIn,
-                    ),
-                  )),
+        Padding(
+          padding: const EdgeInsets.only(left: 2.0),
+          child: Ink(
+            decoration: ShapeDecoration(
+              color: _speechToText.isListening
+                  ? AppColors.primaryDarkest
+                  : AppColors.background,
+              shape: const CircleBorder(),
+            ),
+            child: IconButton(
+              onPressed:
+                  _speechToText.isListening ? _stopListening : _startListening,
+              icon: SvgPicture.asset(
+                AppIcons.broken['microphone']!,
+                colorFilter: const ColorFilter.mode(
+                  AppColors.darkGrayDarkest,
+                  BlendMode.srcIn,
+                ),
+              ),
+            ),
+          ),
+        ),
       ], textController: _controller),
       currentUser: ChatbotState.currentUser,
       onSend: (chatMessage) {
