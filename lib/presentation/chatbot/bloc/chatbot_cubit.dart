@@ -37,15 +37,13 @@ class ChatbotCubit extends Cubit<ChatbotState> {
         ];
       }
       gemini
-          .call(
-              params: AiMessageRequest(
-                  requestMessageText: question, images: images))
-          .then((event) {
-        event.fold(
-          (l) => _onSuccess(l, state.chatMessages),
-          (r) => _onFail(r),
-        );
-      });
+        .call(params: AiMessageRequest(requestMessageText: question, images: images))
+        .then((event) {
+          event.fold(
+            (l) => _onSuccess(l, state.chatMessages),
+            (r) => _onFail(r),
+          );
+        });
     } catch (e) {
       print(e);
     }
