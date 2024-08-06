@@ -2,10 +2,14 @@ part of 'chatbot_cubit.dart';
 
 class ChatbotState {
   final List<ChatMessage> chatMessages;
+  final bool aiTyping;
   static ChatUser currentUser = ChatUser(id: "0", firstName: "User");
   static ChatUser geminiUser = ChatUser(id: "1", firstName: "Mika");
 
-  ChatbotState({required this.chatMessages});
+  ChatbotState({
+    required this.aiTyping,
+    required this.chatMessages,
+  });
 }
 
 getInitialDiagnosticMessages(String diagnosticName) => [
@@ -14,5 +18,11 @@ getInitialDiagnosticMessages(String diagnosticName) => [
         isMarkdown: true,
         user: ChatbotState.currentUser,
         createdAt: DateTime.now(),
+        quickReplies: [
+          QuickReply(
+            title: "Testing the quick reply",
+            value: diagnosticName,
+          ),
+        ],
       )
     ];
