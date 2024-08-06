@@ -50,6 +50,7 @@ class AppIcons {
     'user': _getPath('user', IconType.broken),
     'warning': _getPath('warning-2', IconType.broken),
     'camera': _getPath('camera', IconType.broken),
+    'add': _getPath('add', IconType.broken),
   };
 }
 
