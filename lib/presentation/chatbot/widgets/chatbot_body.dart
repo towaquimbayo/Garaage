@@ -196,9 +196,7 @@ class _ChatbotBodyState extends State<ChatbotBody> {
       },
       messages: chatBotState.chatMessages,
       typingUsers: [
-        if (chatBotState.chatMessages.isNotEmpty &&
-            chatBotState.chatMessages.first.user != ChatbotState.geminiUser)
-          ChatbotState.geminiUser,
+        if (chatBotState.aiTyping) ChatbotState.geminiUser,
       ],
     );
   }
