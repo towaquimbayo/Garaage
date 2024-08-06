@@ -97,6 +97,14 @@ class ChatbotCubit extends Cubit<ChatbotState> {
     """;
   }
 
+  void startNewChat() {
+    emit(
+      ChatbotState(
+        chatMessages: [],
+      ),
+    );
+  }
+
   void _onSuccess(AiMessageResponse l, List<ChatMessage> messages) {
     ChatMessage? lastMessage = messages.firstOrNull;
     if (lastMessage != null && lastMessage.user == ChatbotState.geminiUser) {
