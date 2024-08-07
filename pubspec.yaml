@@ -37,6 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.6
   flutter_svg: ^2.0.10+1
   flutter_native_splash: ^2.4.1
+  flutter_launcher_icons: ^0.13.1
   image_picker: ^1.1.2
   url_launcher: ^6.3.0
   flutter_bloc: ^8.1.6
@@ -50,6 +51,7 @@ dependencies:
   firebase_auth: ^5.1.2
   cloud_firestore: ^5.1.0
   google_sign_in: ^6.2.1
+  firebase_app_check: ^0.3.0+4
   flutter_gemini:
   google_generative_ai: ^0.4.3
   camera: ^0.11.0+1

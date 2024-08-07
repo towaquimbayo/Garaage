@@ -31,4 +31,9 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either> getCurrentUser() async {
     return sl<AuthFirebaseService>().getCurrentUser();
   }
+
+  @override
+  Future<Either> checkUserHasCars() async {
+    return sl<AuthFirebaseService>().checkUserHasCars();
+  }
 }

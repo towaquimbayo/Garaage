@@ -9,4 +9,5 @@ abstract class AuthRepository {
   Future<Either> signInWithGoogle();
   Future<Either> signOut();
   Future<Either> getCurrentUser();
+  Future<Either> checkUserHasCars();
 }
