@@ -30,7 +30,7 @@ class ProfilePage extends StatelessWidget {
             });
           },
         );
-        
+
         return Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: MyAppBar(
@@ -83,10 +83,16 @@ class ProfilePage extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 0, 0, 23),
-                    child: SvgPicture.asset(
-                      AppIcons.broken['user']!,
-                      height: 40,
-                    ),
+                    child: user != null && user.imageUrl != null
+                        ? CircleAvatar(
+                            backgroundImage: NetworkImage(
+                              user.imageUrl!,
+                            ),
+                          )
+                        : SvgPicture.asset(
+                            AppIcons.broken['user']!,
+                            height: 40,
+                          ),
                   ),
                   Text(
                     user == null
