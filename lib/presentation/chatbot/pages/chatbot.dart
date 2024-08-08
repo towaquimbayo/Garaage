@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:garaage/presentation/chatbot/widgets/new_chat.dart';
 
 import '../../../common/widgets/my_app_bar.dart';
 import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_text.dart';
 import '../widgets/chatbot_body.dart';
+import '../widgets/new_chat.dart';
 
 class ChatbotPage extends StatelessWidget {
   static String routeName = '/chatbot';

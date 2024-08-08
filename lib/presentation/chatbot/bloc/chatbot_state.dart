@@ -14,7 +14,7 @@ class ChatbotState {
 
 getInitialDiagnosticMessages(String diagnosticName) => [
       ChatMessage(
-        text: "Hey, could you help me with the issue **$diagnosticName**.",
+        text: "Hey, could you help me with the issue **$diagnosticName**?",
         isMarkdown: true,
         user: ChatbotState.currentUser,
         createdAt: DateTime.now(),

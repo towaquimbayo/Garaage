@@ -3,7 +3,7 @@ import 'dart:typed_data';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dash_chat_2/dash_chat_2.dart';
-import 'package:garaage/core/error/failures.dart';
+import '../../../core/error/failures.dart';
 
 import '../../../data/models/chat/ai_message_request.dart';
 import '../../../data/models/chat/ai_message_response.dart';

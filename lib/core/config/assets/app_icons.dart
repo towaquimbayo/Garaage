@@ -16,7 +16,6 @@ class AppIcons {
     'image': _getPath('image', IconType.bold),
     'messages': _getPath('messages-3', IconType.bold),
     'send': _getPath('send-2', IconType.bold),
-    'forbidden': _getPath('forbidden-2', IconType.bold),
     'close-circle': _getPath('close-circle', IconType.bold),
   };
 
