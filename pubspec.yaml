@@ -54,6 +54,7 @@ dependencies:
   firebase_app_check: ^0.3.0+4
   flutter_gemini:
   google_generative_ai: ^0.4.3
+  camera: ^0.11.0+1
 
 dev_dependencies:
   flutter_test:

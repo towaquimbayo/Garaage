@@ -1,9 +1,9 @@
-// How to use: 
+// How to use:
 // - SvgPicture.asset(AppIcons.bold['arrow-right']!);
 // - SvgPicture.asset(AppIcons.broken['arrow-right']!);
 
 enum IconType { bold, broken }
-  
+
 class AppIcons {
   static String _getPath(String name, IconType type) => _Icon(name, type).path;
 
@@ -16,6 +16,7 @@ class AppIcons {
     'image': _getPath('image', IconType.bold),
     'messages': _getPath('messages-3', IconType.bold),
     'send': _getPath('send-2', IconType.bold),
+    'close-circle': _getPath('close-circle', IconType.bold),
   };
 
   static final broken = {
@@ -47,6 +48,8 @@ class AppIcons {
     'transmission': _getPath('data', IconType.broken),
     'user': _getPath('user', IconType.broken),
     'warning': _getPath('warning-2', IconType.broken),
+    'camera': _getPath('camera', IconType.broken),
+    'add': _getPath('add', IconType.broken),
   };
 }
 
