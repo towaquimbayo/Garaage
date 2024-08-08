@@ -69,6 +69,33 @@ class AuthFirebaseServiceImpl implements AuthFirebaseService {
         },
       );
 
+      // @TODO: Replace with empty vehicle data when Bluetooth OBD2 connect feature is done.
+      Map<String, dynamic> vehicle = {
+        'vin': '1NXBR32E85Z505904',
+        'status': 'Disconnected',
+        'name': 'Honda Civic',
+        'description': '2021 Sport Hybrid Edition',
+        'transmission': 'Auto',
+        'numSeats': 5,
+        'errors': 0,
+        'fuelConsumed': 70,
+        'totalFuel': 100,
+        'speed': 68,
+        'rpm': 2731,
+        'battery': 84,
+        'oil': 59,
+        'coolantCurrent': 90,
+        'coolantDesired': 120,
+      };
+
+      // Create empty Vehicles collection for user
+      FirebaseFirestore.instance
+          .collection('Users')
+          .doc(data.user?.uid)
+          .collection('Vehicles')
+          .doc(vehicle['vin'])
+          .set(vehicle);
+
       return const Right('User created successfully.');
     } on FirebaseAuthException catch (e) {
       String type = 'error';
