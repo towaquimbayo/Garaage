@@ -34,7 +34,7 @@ _Check out the Figma high fidelity prototype designs [_here_](https://www.figma.
 * Abhishek Chouhan [GitHub](https://github.com/abhishekchouhannk) [LinkedIn](https://www.linkedin.com/in/abhishekchouhannk)
 * Bhavnoor Saroya [GitHub](https://github.com/BhavnoorSaroya) [LinkedIn](https://www.linkedin.com/in/bhavnoor-saroya)
 
-[![Contributors](https://contrib.rocks/image?repo=immangat/GeminiHackahton)](https://github.com/immangat/GeminiHackahton/graphs/contributors)
+[![Contributors](https://contrib.rocks/image?repo=immangat/Garaage)](https://github.com/immangat/Garaage/graphs/contributors)
 
 ## Technologies
 
@@ -74,7 +74,7 @@ _Check out the Figma high fidelity prototype designs [_here_](https://www.figma.
 1. Clone the repository to your local machine:
 
   ```sh
-  git clone https://github.com/immangat/GeminiHackahton.git
+  git clone https://github.com/immangat/Garaage.git
   ```
 
 2. Install the required dependencies:
