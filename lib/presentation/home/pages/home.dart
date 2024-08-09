@@ -1,13 +1,19 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../../core/config/assets/app_images.dart';
 import '../../../common/widgets/my_app_bar.dart';
 import '../../../core/config/assets/app_icons.dart';
 import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_text.dart';
+import '../../../core/error/error_handler.dart';
+import '../../../domain/entities/user.dart';
+import '../../profile/bloc/profile_cubit.dart';
+import '../widgets/fuel_consumption_card.dart';
+import '../widgets/vehicle_card.dart';
+import '../widgets/vehicle_stats_card.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,270 +23,157 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final FirebaseFirestore _db = FirebaseFirestore.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  User? user;
-  String? uid;
-  String firstname = '';
-
-  // @TODO: Replace with DB / Bloc data
-  Map<String, dynamic> vehicle = {
-    'name': 'Honda Civic',
-    'description': '2021 Sport Hybrid Edition',
-    'image': Image.asset(
-      AppImages.hondaCivic,
-      fit: BoxFit.contain,
-    ),
-    'transmission': 'Auto',
-    'numSeats': 5,
-    'errors': 0,
-    'fuelConsumed': 70,
-    'totalFuel': 100,
-  };
+  Map<String, dynamic> vehicle = {};
 
   @override
   void initState() {
     super.initState();
-    user = _auth.currentUser;
-    uid = user?.uid;
-    if (uid != null) _getUserData();
+    final user = FirebaseAuth.instance.currentUser;
+    if (user?.uid != null) fetchVehicleData(user!.uid);
   }
 
-  // Get user data from Firestore
-  void _getUserData() async {
+  // Fetch vehicle data from Firestore using the user ID
+  Future<void> fetchVehicleData(String userId) async {
     try {
-      // @TODO: Replace with actual document ID
-      DocumentSnapshot userDoc =
-          await _db.collection('Users').doc('kXuoDoi8vO0jLUBOMhfO').get();
-      if (userDoc.exists) {
-        Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+      DocumentSnapshot vehicleData = await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(userId)
+          .collection('Vehicles')
+          .doc('1NXBR32E85Z505904') // @TOOD: Replace hardcoded VIN
+          .get();
+
+      if (vehicleData.exists) {
         setState(() {
-          print("Firestore UserData: $userData\n");
-          firstname = userData['firstName'] as String;
+          vehicle = vehicleData.data() as Map<String, dynamic>;
+          // @TODO: Remove this when image is stored in Firestore
+          vehicle['image'] = Image.asset(
+            AppImages.hondaCivic,
+            fit: BoxFit.contain,
+          );
         });
-      } else {
-        print('User Document does not exist');
       }
     } catch (e) {
-      print('Error getting user data from Firestore: $e');
+      ErrorHandler.handleError(context, e.toString());
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    context.read<ProfileCubit>().getCurrentUser();
     return Scaffold(
       appBar: MyAppBar(
         actions: true,
-        title: Text(
-          'Welcome $firstname',
-          style: AppText.pageTitleText.copyWith(color: AppColors.headingText),
+        title: BlocBuilder<ProfileCubit, ProfileState>(
+          builder: (context, state) {
+            UserEntity? user;
+            state.result?.fold(
+              (l) {
+                user = l;
+              },
+              (r) {
+                Future(() {
+                  ErrorHandler.handleError(context, r);
+                });
+              },
+            );
+            String? firstName = "";
+            if (user != null) {
+              firstName = user?.firstName;
+            }
+            return Text(
+              'Welcome $firstName',
+              style:
+                  AppText.pageTitleText.copyWith(color: AppColors.headingText),
+            );
+          },
         ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 15),
-        child: Column(
-          children: [
-            VehicleCard(
-              name: vehicle['name'] as String,
-              description: vehicle['description'] as String,
-              image: vehicle['image'] as Widget,
-              errors: vehicle['errors'] as int,
-              transmission: vehicle['transmission'] as String,
-              numSeats: vehicle['numSeats'] as int,
-            ),
-            const SizedBox(height: 20),
-            FuelConsumptionCard(
-              currentConsumed: vehicle['fuelConsumed'] as int,
-              totalConsumed: vehicle['totalFuel'] as int,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class VehicleCard extends StatelessWidget {
-  final String name;
-  final String description;
-  final Widget image;
-  final int errors;
-  final String transmission;
-  final int numSeats;
-
-  const VehicleCard({
-    super.key,
-    required this.name,
-    required this.description,
-    required this.image,
-    required this.errors,
-    required this.transmission,
-    required this.numSeats,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 1,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      name,
-                      style: AppText.headH3.copyWith(
-                        color: AppColors.headingText,
-                      ),
-                    ),
-                    Text(
-                      description,
-                      style: AppText.bodyS.copyWith(
-                        color: AppColors.bodyText,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(width: 20),
-                Expanded(child: image),
-              ],
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Row(
-                      children: [
-                        SvgPicture.asset(
-                          AppIcons.broken['transmission']!,
-                          width: 18,
-                          colorFilter: const ColorFilter.mode(
-                            AppColors.darkGrayLightest,
-                            BlendMode.srcIn,
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Text(
-                          transmission,
-                          style: AppText.bodyS.copyWith(
-                            color: AppColors.darkGrayLightest,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(width: 15),
-                    Row(
-                      children: [
-                        SvgPicture.asset(
-                          AppIcons.broken['people']!,
-                          width: 18,
-                          colorFilter: const ColorFilter.mode(
-                            AppColors.darkGrayLightest,
-                            BlendMode.srcIn,
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Text(
-                          '$numSeats Seats',
-                          style: AppText.bodyS.copyWith(
-                            color: AppColors.darkGrayLightest,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: errors > 0 ? Colors.red[100] : Colors.green[50],
-                    borderRadius: BorderRadius.circular(50),
+        child: vehicle.isEmpty
+            ? const Center(child: Text('Hmm... No vehicle data found'))
+            : Column(
+                children: [
+                  VehicleCard(
+                    name: vehicle['name'] as String,
+                    description: vehicle['description'] as String,
+                    image: vehicle['image'] as Widget,
+                    errors: vehicle['errors'] as int,
+                    transmission: vehicle['transmission'] as String,
+                    numSeats: vehicle['numSeats'] as int,
+                    status: vehicle['status'] as String,
                   ),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 15,
-                    vertical: 10,
+                  const SizedBox(height: 10),
+                  FuelConsumptionCard(
+                    currentConsumed: vehicle['status'] == 'Disconnected'
+                        ? 0
+                        : vehicle['fuelConsumed'] as int,
+                    totalConsumed: vehicle['totalFuel'] as int,
                   ),
-                  child: Row(
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Icon(
-                        Icons.circle,
-                        color: errors > 0 ? Colors.red : Colors.green,
-                        size: 10,
+                      Expanded(
+                        flex: 4,
+                        child: VehicleStatsCard(
+                          value: vehicle['speed'] as int,
+                          icon: AppIcons.broken['speed']!,
+                          mainLabel: 'Speed',
+                          subLabel: 'km/h',
+                        ),
                       ),
                       const SizedBox(width: 10),
-                      Text(
-                        '$errors Errors',
-                        style: AppText.bodyS.copyWith(
-                          color: AppColors.bodyText,
-                          fontWeight: FontWeight.bold,
+                      Expanded(
+                        flex: 6,
+                        child: VehicleStatsCard(
+                          value: vehicle['rpm'] as int,
+                          icon: AppIcons.broken['rpm']!,
+                          mainLabel: 'Engine RPM',
+                          fixAlignment: true,
                         ),
                       ),
                     ],
                   ),
-                ),
-              ],
-            ),
-          ],
-        ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        flex: 6,
+                        child: VehicleStatsCard(
+                          value: vehicle['battery'] as int,
+                          icon: AppIcons.broken['battery']!,
+                          mainLabel: 'Car Battery',
+                          postfix: '%',
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        flex: 4,
+                        child: VehicleStatsCard(
+                          value: vehicle['oil'] as int,
+                          icon: AppIcons.broken['drop']!,
+                          mainLabel: 'Oil',
+                          postfix: '%',
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  VehicleStatsCard(
+                    value: vehicle['coolantCurrent'] as int,
+                    valueAlt: vehicle['coolantDesired'] as int,
+                    icon: AppIcons.broken['coolant']!,
+                    mainLabel: 'Coolant Temp',
+                    subLabel: 'current',
+                    subLabelAlt: 'desired',
+                    postfix: '°C',
+                  ),
+                  const SizedBox(height: 20),
+                ],
+              ),
       ),
     );
-  }
-}
-
-class FuelConsumptionCard extends StatelessWidget {
-  final int currentConsumed;
-  final int totalConsumed;
-
-  const FuelConsumptionCard({
-    super.key,
-    required this.currentConsumed,
-    required this.totalConsumed,
-  });
-
-  // progress bar
-  @override
-  Widget build(BuildContext context) {
-    return Stack(children: [
-      LinearProgressIndicator(
-        value: currentConsumed / totalConsumed,
-        backgroundColor: AppColors.lightGrayMedium,
-        valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
-        semanticsLabel: 'Fuel Consumption',
-        semanticsValue: '$currentConsumed / $totalConsumed',
-        minHeight: 40,
-        borderRadius: BorderRadius.circular(50),
-      ),
-      Positioned(
-        left: 20,
-        top: 0,
-        bottom: 0,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SvgPicture.asset(
-              AppIcons.broken['fuel']!,
-              width: 20,
-              colorFilter: const ColorFilter.mode(
-                AppColors.surface,
-                BlendMode.srcIn,
-              ),
-            ),
-            const SizedBox(width: 10),
-            Text(
-              'Fuel',
-              style: AppText.bodyText.copyWith(color: AppColors.surface),
-            ),
-          ],
-        ),
-      ),
-    ]);
   }
 }

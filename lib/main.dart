@@ -1,3 +1,4 @@
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +9,10 @@ import 'package:path_provider/path_provider.dart';
 
 import 'core/config/theme/app_theme.dart';
 import 'firebase_options.dart';
+import 'presentation/chatbot/bloc/chatbot_cubit.dart';
 import 'presentation/navigation/bloc/navigation_cubit.dart';
 import 'presentation/onboarding/pages/onboarding.dart';
+import 'presentation/profile/bloc/profile_cubit.dart';
 import 'presentation/splash/bloc/splash_cubit.dart';
 import 'routes.dart';
 import 'service_locator.dart';
@@ -17,7 +20,7 @@ import 'service_locator.dart';
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  
+
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: kIsWeb
         ? HydratedStorage.webStorageDirectory
@@ -26,6 +29,12 @@ Future<void> main() async {
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  await FirebaseAppCheck.instance.activate(
+    webProvider: ReCaptchaV3Provider('recaptcha-v3-site-key'),
+    androidProvider: AndroidProvider.debug,
+    appleProvider: AppleProvider.appAttest,
   );
 
   await initializeDependencies();
@@ -45,6 +54,12 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<NavigationCubit>(
           create: (BuildContext context) => NavigationCubit(),
+        ),
+        BlocProvider<ChatbotCubit>(
+          create: (BuildContext context) => ChatbotCubit(),
+        ),
+        BlocProvider<ProfileCubit>(
+          create: (context) => ProfileCubit(),
         ),
       ],
       child: BlocListener<SplashCubit, bool>(

@@ -16,6 +16,6 @@ final Map<String, WidgetBuilder> routes = {
   ConnectPage.routeName: (context) => const ConnectPage(),
   NavigationPage.routeName: (context) => const NavigationPage(),
   ProfilePage.routeName: (context) => const ProfilePage(),
-  ChatbotPage.routeName: (context) => const ChatbotPage(),
   ARIdentifyPage.routeName: (context) => const ARIdentifyPage(),
+  ChatbotPage.routeName: (context) => const ChatbotPage(),
 };

@@ -15,6 +15,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool? actions;
   final bool? logout;
   final Color? backgroundColor;
+  final Widget? newChat;
 
   const MyAppBar({
     super.key,
@@ -22,6 +23,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.leading,
     this.actions,
     this.logout,
+    this.newChat,
     this.backgroundColor = AppColors.background,
   });
 
@@ -75,7 +77,8 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                         ),
                       ),
                     ),
-                    onPressed: () => Navigator.of(context).pushNamed(ProfilePage.routeName),
+                    onPressed: () =>
+                        Navigator.of(context).pushNamed(ProfilePage.routeName),
                   ),
                 ]
               : logout == true
@@ -99,15 +102,16 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
                           var result = await sl<SignOutUseCase>().call();
                           result.fold(
                             (l) => ErrorHandler.handleError(context, l),
-                            (r) => Navigator.of(context).pushNamedAndRemoveUntil(
-                              OnboardingPage.routeName, 
-                              (route) => false
-                            ),
+                            (r) => Navigator.of(context)
+                                .pushNamedAndRemoveUntil(
+                                    OnboardingPage.routeName, (route) => false),
                           );
                         },
                       ),
                     ]
-                  : [],
+                  : newChat != null
+                      ? [newChat!]
+                      : [],
         ),
       ),
     );
