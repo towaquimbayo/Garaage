@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-import '../../conts.dart';
 import '../../core/error/failures.dart';
 import '../models/chat/ai_message_request.dart';
 import '../models/chat/ai_message_response.dart';
@@ -13,7 +13,9 @@ abstract class AiMessageService {
 class AiMessageServiceImpl implements AiMessageService {
   AiMessageServiceImpl() {
     model = GenerativeModel(
-        model: 'gemini-1.5-flash-latest', apiKey: GEMINI_API_KEY);
+      model: 'gemini-1.5-flash-latest',
+      apiKey: dotenv.env['GOOGLE_GEMINI_API_KEY'] ?? '',
+    );
   }
 
   late GenerativeModel model;

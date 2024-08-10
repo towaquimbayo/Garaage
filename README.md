@@ -110,6 +110,8 @@ _Check out the Figma high fidelity prototype designs [_here_](https://www.figma.
   flutter pub get
   ```
 
+3. Generate a new Google Gemini API key by following the instructions provided in the [Google Gemini API documentation](https://ai.google.dev/gemini-api/docs/api-key) and add the API key to your .env file.
+
 </details>
 
 <details>
