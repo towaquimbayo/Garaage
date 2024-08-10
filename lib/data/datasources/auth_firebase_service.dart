@@ -191,10 +191,19 @@ class AuthFirebaseServiceImpl implements AuthFirebaseService {
     try {
       final currentFireBaseUser = FirebaseAuth.instance.currentUser;
       if (currentFireBaseUser == null) throw Exception("Current user is null");
+
       DocumentSnapshot userDoc = await FirebaseFirestore.instance
           .collection('Users')
           .doc(currentFireBaseUser.uid)
           .get();
+      
+      QuerySnapshot userVehiclesDoc = await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(currentFireBaseUser.uid)
+          .collection('Vehicles')
+          .get();
+      final userVehiclesData = userVehiclesDoc.docs.map((e) => e.data()).toList();
+
       if (userDoc.exists) {
         final userData = userDoc.data() as Map<String, dynamic>;
         final localUser = UserEntity(
@@ -202,6 +211,7 @@ class AuthFirebaseServiceImpl implements AuthFirebaseService {
           lastName: userData['lastName'],
           email: userData['email'],
           imageUrl: userData['imageUrl'],
+          vehicles: userVehiclesData,
         );
         return Left(localUser);
       } else {

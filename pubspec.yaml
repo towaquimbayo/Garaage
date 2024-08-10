@@ -56,6 +56,8 @@ dependencies:
   google_generative_ai: ^0.4.3
   camera: ^0.11.0+1
   flutter_dotenv: ^5.1.0
+  flutter_blue_plus: ^1.32.11
+  flutter_blue_classic: ^0.0.3
 
 dev_dependencies:
   flutter_test:
