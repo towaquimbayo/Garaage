@@ -1,12 +1,12 @@
 import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
-import 'package:garaage/data/models/chat/ai_diagnostic_request.dart';
-import 'package:garaage/domain/entities/diagnostic_report.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import '../../core/error/failures.dart';
+import '../../domain/entities/diagnostic_report.dart';
+import '../models/chat/ai_diagnostic_request.dart';
 import '../models/chat/ai_message_request.dart';
 import '../models/chat/ai_message_response.dart';
 
