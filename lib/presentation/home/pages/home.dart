@@ -35,16 +35,16 @@ class _HomePageState extends State<HomePage> {
   // Fetch vehicle data from Firestore using the user ID
   Future<void> fetchVehicleData(String userId) async {
     try {
-      DocumentSnapshot vehicleData = await FirebaseFirestore.instance
+      QuerySnapshot userVehicles = await FirebaseFirestore.instance
           .collection('Users')
           .doc(userId)
           .collection('Vehicles')
-          .doc('1NXBR32E85Z505904') // @TOOD: Replace hardcoded VIN
           .get();
+      final userVehiclesData = userVehicles.docs.map((e) => e.data()).toList();
 
-      if (vehicleData.exists) {
+      if (userVehiclesData.isNotEmpty) {
         setState(() {
-          vehicle = vehicleData.data() as Map<String, dynamic>;
+          vehicle = userVehiclesData[0] as Map<String, dynamic>;
           // @TODO: Remove this when image is stored in Firestore
           vehicle['image'] = Image.asset(
             AppImages.toyotaPrius,
