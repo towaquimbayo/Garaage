@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'core/config/theme/app_theme.dart';
 import 'firebase_options.dart';
@@ -36,6 +37,8 @@ Future<void> main() async {
     androidProvider: AndroidProvider.debug,
     appleProvider: AppleProvider.appAttest,
   );
+
+  await dotenv.load(fileName: ".env");
 
   await initializeDependencies();
 
