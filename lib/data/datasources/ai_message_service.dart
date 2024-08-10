@@ -81,7 +81,8 @@ class AiMessageServiceImpl implements AiMessageService {
         ],
       );
       Map<String, dynamic> jsonResponse = jsonDecode(response.text!);
-      DiagnosticReport report = DiagnosticReport.fromJson(jsonResponse);
+      DiagnosticReportEntity report =
+          DiagnosticReportEntity.fromJson(jsonResponse);
       return Right(report);
     } catch (e) {
       Failure failure = ServerFailure(
