@@ -10,9 +10,11 @@ import '../../../core/config/theme/app_text.dart';
 import '../../../core/error/error_handler.dart';
 import '../../../core/error/failures.dart';
 import '../../../data/models/auth/create_user_req.dart';
+import '../../../domain/usecases/auth/check_user_has_cars.dart';
 import '../../../domain/usecases/auth/register.dart';
 import '../../../domain/usecases/auth/sign_in_with_google.dart';
 import '../../../service_locator.dart';
+import '../../connect/pages/connect.dart';
 import '../../navigation/pages/navigation.dart';
 import 'sign_in.dart';
 
@@ -80,10 +82,23 @@ class RegisterPage extends StatelessWidget {
                 );
                 result.fold(
                   (l) => ErrorHandler.handleError(context, l),
-                  (r) {
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                      NavigationPage.routeName,
-                      (route) => false,
+                  (r) async {
+                    var hasCarResult = await sl<CheckUserHasCarsUseCase>().call();
+                    hasCarResult.fold(
+                      (hasCars) {
+                        if (hasCars) {
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                            NavigationPage.routeName,
+                            (route) => false,
+                          );
+                        } else {
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                            ConnectPage.routeName,
+                            (route) => false,
+                          );
+                        }
+                      },
+                      (error) => ErrorHandler.handleError(context, error),
                     );
                   },
                 );
@@ -324,10 +339,23 @@ class RegisterPage extends StatelessWidget {
             var result = await sl<SignInWithGoogleUseCase>().call();
             result.fold(
               (l) => ErrorHandler.handleError(context, l),
-              (r) {
-                Navigator.of(context).pushNamedAndRemoveUntil(
-                  NavigationPage.routeName,
-                  (route) => false,
+              (r) async {
+                var hasCarResult = await sl<CheckUserHasCarsUseCase>().call();
+                hasCarResult.fold(
+                  (hasCars) {
+                    if (hasCars) {
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                        NavigationPage.routeName,
+                        (route) => false,
+                      );
+                    } else {
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                        ConnectPage.routeName,
+                        (route) => false,
+                      );
+                    }
+                  },
+                  (error) => ErrorHandler.handleError(context, error),
                 );
               },
             );
