@@ -4,7 +4,7 @@
 
 ![Garaage Thumbnail](screenshots/garaage-thumbnail.jpg)
 
-A mobile application developed with Flutter, Google Gemini API, and Google ARCore, designed to revolutionize vehicle diagnostics and maintenance. By leveraging an OBD2 (On-board diagnostics) scanner, the app provides detailed diagnostic reports and maintenance recommendations, ensuring users can efficiently manage their vehicle's health. This project was developed for the Google Gemini API Developer Competition 2024, showcasing the integration of advanced Google technologies.
+A mobile application built using Flutter, Google Gemini API, and Google ARCore, aimed at transforming vehicle diagnostics and maintenance. By leveraging an OBD2 (On-board diagnostics) scanner, the app offers comprehensive diagnostic reports and maintenance suggestions, enabling users to effectively monitor their vehicle's health. This project was created for the Google Gemini API Developer Competition 2024, demonstrating the integration of cutting-edge Google technologies.
 
 _Check out the Figma high fidelity prototype designs [_here_](https://www.figma.com/design/YdUcQaqNCCKZ5ZTA5HZhlf/garaage?node-id=1-2&t=5zR3jATXVg4i26S8-1)._
 
@@ -13,7 +13,7 @@ _Check out the Figma high fidelity prototype designs [_here_](https://www.figma.
 
 ## Table of Contents
 
-<!-- * [Screenshots](#screenshots) -->
+* [Screenshots](#screenshots)
 * [Acknowledgements](#acknowledgements)
 * [Technologies](#technologies)
 * [Usage](#usage)
@@ -25,6 +25,33 @@ _Check out the Figma high fidelity prototype designs [_here_](https://www.figma.
   * [Vehicle Diagnostics and Maintenance](#vehicle-diagnostics-and-maintenance)
   * [Real-time Vehicle Information](#real-time-vehicle-information)
   * [Interactive Assistance](#interactive-assistance)
+
+## Screenshots
+
+<table width="100%">
+  <tbody>
+    <tr>
+      <td width="33%"><img src="screenshots/register.jpg"/></td>
+      <td width="33%"><img src="screenshots/home.jpg"/></td>
+      <td width="33%"><img src="screenshots/diagnostics.jpg"/></td>
+    </tr>
+    <tr>
+      <td width="33%" align="center"><em>Register Screen</em></td>
+      <td width="33%" align="center"><em>Home Screen</em></td>
+      <td width="33%" align="center"><em>Diagnostics Screen</em></td>
+    </tr>
+    <tr>
+      <td width="33%"><img src="screenshots/chat-support.jpg"/></td>
+      <td width="33%"><img src="screenshots/ar-core-identify.jpg"/></td>
+      <td width="33%"><img src="screenshots/profile.jpg"/></td>
+    </tr>
+    <tr>
+      <td width="33%" align="center"><em>Chat Support Screen</em></td>
+      <td width="33%" align="center"><em>AR Core Identify Screen</em></td>
+      <td width="33%" align="center"><em>Profile Screen</em></td>
+    </tr>
+  </tbody>
+</table>
 
 ## Acknowledgements
 
