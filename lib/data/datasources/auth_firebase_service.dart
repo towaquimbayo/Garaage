@@ -30,8 +30,8 @@ class AuthFirebaseServiceImpl implements AuthFirebaseService {
     Map<String, dynamic> vehicle = {
       'vin': '1NXBR32E85Z505904',
       'status': 'Connected',
-      'name': 'Honda Civic',
-      'description': '2021 Sport Hybrid Edition',
+      'name': 'Toyota Prius',
+      'description': '2005 Base',
       'transmission': 'Auto',
       'numSeats': 5,
       'errors': 2,

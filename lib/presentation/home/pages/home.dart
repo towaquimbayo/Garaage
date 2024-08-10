@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage> {
           vehicle = vehicleData.data() as Map<String, dynamic>;
           // @TODO: Remove this when image is stored in Firestore
           vehicle['image'] = Image.asset(
-            AppImages.hondaCivic,
+            AppImages.toyotaPrius,
             fit: BoxFit.contain,
           );
         });
