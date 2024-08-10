@@ -26,7 +26,6 @@ class ChatbotCubit extends Cubit<ChatbotState> {
     ChatMessage message,
   ) {
     final messages = state.chatMessages;
-    print(messages.length);
     emit(ChatbotState(chatMessages: [
       message,
       ...messages,
