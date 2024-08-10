@@ -30,6 +30,14 @@
           }
         },
         {
+          "client_id": "916224851549-vd22gkkasqbk959bb4m6prp0h1o6msff.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.garaage",
+            "certificate_hash": "6a8d82a3ff7f794be1e9ed8cf16f52637618b705"
+          }
+        },
+        {
           "client_id": "916224851549-cogbif9kstmp9bd64euloogaa1ptempe.apps.googleusercontent.com",
           "client_type": 3
         }
