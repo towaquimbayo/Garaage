@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:dartz/dartz.dart';
+import 'package:garaage/data/models/chat/ai_diagnostic_request.dart';
+import 'package:garaage/domain/entities/diagnostic_report.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -8,6 +12,8 @@ import '../models/chat/ai_message_response.dart';
 
 abstract class AiMessageService {
   Future<Either> sendAiMessage(AiMessageRequest aiMessageReq);
+
+  Future<Either> getDiagnosticReport(AiDiagnosticRequest aiDiagnosticReq);
 }
 
 class AiMessageServiceImpl implements AiMessageService {
@@ -50,8 +56,42 @@ class AiMessageServiceImpl implements AiMessageService {
       return Left(AiMessageResponse(aiMessageResponseText: response.text!));
     } catch (e) {
       Failure failure = ServerFailure(
-          "error", "An error has occured while getting ai message.");
+          "error", "An error has occurred while getting ai message.");
       return Right(failure);
+    }
+  }
+
+  @override
+  Future<Either> getDiagnosticReport(
+      AiDiagnosticRequest aiDiagnosticReq) async {
+    final diagnosticPrompt = """
+    What does the ${aiDiagnosticReq.troubleCode} code mean?
+    Include description, causes and how to fix. 
+    Give the result in the following format:
+    {
+      'description': "",
+      'causes':""
+      'howToFix': ""
+    }
+    """;
+    try {
+      final response = await model.generateContent(
+        [
+          Content.text(
+            diagnosticPrompt,
+          ),
+        ],
+      );
+      Map<String, dynamic> jsonResponse = jsonDecode(response.text!);
+      DiagnosticReportEntity report =
+          DiagnosticReportEntity.fromJson(jsonResponse);
+      return Right(report);
+    } catch (e) {
+      Failure failure = ServerFailure(
+        'error',
+        'An error occurred while getting diagnostic report.',
+      );
+      return left(failure);
     }
   }
 }
