@@ -121,7 +121,7 @@ class ProfilePage extends StatelessWidget {
                   ),
                   TextField(
                     controller: TextEditingController()
-                      ..text = '1NXBR32E85Z505904',
+                      ..text = user == null ? "null" : user.vehicles == null ? "null" : user.vehicles!.first['vin'],
                     style: AppText.bodyText
                         .copyWith(color: AppColors.lightGrayDarkest),
                     enabled: false,
