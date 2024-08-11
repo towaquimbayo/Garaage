@@ -25,35 +25,6 @@ abstract class AuthFirebaseService {
 }
 
 class AuthFirebaseServiceImpl implements AuthFirebaseService {
-  void createVehicleCollection(String userId) {
-    // @TODO: Replace with empty vehicle data when Bluetooth OBD2 connect feature is done.
-    Map<String, dynamic> vehicle = {
-      'vin': '1NXBR32E85Z505904',
-      'status': 'Connected',
-      'name': 'Toyota Prius',
-      'description': '2005 Base',
-      'transmission': 'Auto',
-      'numSeats': 5,
-      'errors': 2,
-      'fuelConsumed': 70,
-      'totalFuel': 100,
-      'speed': 68,
-      'rpm': 2731,
-      'battery': 84,
-      'oil': 59,
-      'coolantCurrent': 90,
-      'coolantDesired': 120,
-    };
-
-    // Create empty Vehicles collection for user
-    FirebaseFirestore.instance
-        .collection('Users')
-        .doc(userId)
-        .collection('Vehicles')
-        .doc(vehicle['vin'])
-        .set(vehicle);
-  }
-
   @override
   Future<Either> signIn(SignInUserReq signInUserReq) async {
     try {
@@ -97,9 +68,6 @@ class AuthFirebaseServiceImpl implements AuthFirebaseService {
           'email': data.user?.email,
         },
       );
-
-      // Create a Vehicle collection
-      createVehicleCollection(data.user!.uid);
 
       return const Right('User created successfully.');
     } on FirebaseAuthException catch (e) {
@@ -151,9 +119,6 @@ class AuthFirebaseServiceImpl implements AuthFirebaseService {
           'email': googleUser.email,
           'imageUrl': googleUser.photoUrl,
         });
-
-        // Create a Vehicle collection
-        createVehicleCollection(userCredential.user!.uid);
       }
 
       return const Right('Signed in with Google successfully');
@@ -196,13 +161,14 @@ class AuthFirebaseServiceImpl implements AuthFirebaseService {
           .collection('Users')
           .doc(currentFireBaseUser.uid)
           .get();
-      
+
       QuerySnapshot userVehiclesDoc = await FirebaseFirestore.instance
           .collection('Users')
           .doc(currentFireBaseUser.uid)
           .collection('Vehicles')
           .get();
-      final userVehiclesData = userVehiclesDoc.docs.map((e) => e.data()).toList();
+      final userVehiclesData =
+          userVehiclesDoc.docs.map((e) => e.data()).toList();
 
       if (userDoc.exists) {
         final userData = userDoc.data() as Map<String, dynamic>;

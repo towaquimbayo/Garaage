@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -16,7 +18,7 @@ import '../../navigation/pages/navigation.dart';
 
 class ConnectPage extends StatefulWidget {
   static String routeName = '/connect';
-  
+
   const ConnectPage({super.key});
 
   @override
@@ -36,6 +38,8 @@ class _ConnectPageState extends State<ConnectPage> {
   int? _connectingToIndex;
   StreamSubscription? _scanningStateSubscription;
 
+  final User? user = FirebaseAuth.instance.currentUser;
+
   @override
   void initState() {
     super.initState();
@@ -47,7 +51,8 @@ class _ConnectPageState extends State<ConnectPage> {
 
     try {
       adapterState = await _flutterBlueClassicPlugin.adapterStateNow;
-      _adapterStateSubscription = _flutterBlueClassicPlugin.adapterState.listen((current) {
+      _adapterStateSubscription =
+          _flutterBlueClassicPlugin.adapterState.listen((current) {
         if (mounted) {
           setState(() => _adapterState = current);
 
@@ -56,10 +61,12 @@ class _ConnectPageState extends State<ConnectPage> {
           }
         }
       });
-      _scanSubscription = _flutterBlueClassicPlugin.scanResults.listen((device) {
+      _scanSubscription =
+          _flutterBlueClassicPlugin.scanResults.listen((device) {
         if (mounted) setState(() => _scanResults.add(device));
       });
-      _scanningStateSubscription = _flutterBlueClassicPlugin.isScanning.listen((isScanning) {
+      _scanningStateSubscription =
+          _flutterBlueClassicPlugin.isScanning.listen((isScanning) {
         if (mounted) setState(() => _isScanning = isScanning);
       });
     } catch (e) {
@@ -72,7 +79,8 @@ class _ConnectPageState extends State<ConnectPage> {
       _adapterState = adapterState;
     });
 
-    if (_adapterState == BluetoothAdapterState.on) _flutterBlueClassicPlugin.startScan();
+    if (_adapterState == BluetoothAdapterState.on)
+      _flutterBlueClassicPlugin.startScan();
   }
 
   @override
@@ -86,7 +94,7 @@ class _ConnectPageState extends State<ConnectPage> {
   @override
   Widget build(BuildContext context) {
     List<BluetoothDevice> scanResults = _scanResults.toList();
-    
+
     return Scaffold(
       appBar: MyAppBar(
         leading: true,
@@ -97,30 +105,30 @@ class _ConnectPageState extends State<ConnectPage> {
       ),
       body: _adapterState == BluetoothAdapterState.on
           ? Column(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  physics: const ScrollPhysics(),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 24),
-                      _headingText(),
-                      const SizedBox(height: 24),
-                      _availableDevices(scanResults),
-                    ],
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    physics: const ScrollPhysics(),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 24),
+                        _headingText(),
+                        const SizedBox(height: 24),
+                        _availableDevices(scanResults),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(20),
-                color: AppColors.background,
-                child: _continueWithSampleData(),
-              ),
-            ],
-          )
-        : _buildBluetoothOffScreen(),
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  color: AppColors.background,
+                  child: _continueWithSampleData(),
+                ),
+              ],
+            )
+          : _buildBluetoothOffScreen(),
     );
   }
 
@@ -184,7 +192,8 @@ class _ConnectPageState extends State<ConnectPage> {
                 ),
                 subtitle: Text(
                   result.address,
-                  style: AppText.bodyS.copyWith(color: AppColors.placeholderText),
+                  style:
+                      AppText.bodyS.copyWith(color: AppColors.placeholderText),
                 ),
                 trailing: SvgPicture.asset(
                   AppIcons.broken['arrow-right']!,
@@ -197,7 +206,8 @@ class _ConnectPageState extends State<ConnectPage> {
                   BluetoothConnection? connection;
                   setState(() => _connectingToIndex = index);
                   try {
-                    connection = await _flutterBlueClassicPlugin.connect(result.address);
+                    connection =
+                        await _flutterBlueClassicPlugin.connect(result.address);
                     if (!this.context.mounted) return;
                     if (connection != null && connection.isConnected) {
                       if (mounted) setState(() => _connectingToIndex = null);
@@ -210,7 +220,8 @@ class _ConnectPageState extends State<ConnectPage> {
                     if (mounted) setState(() => _connectingToIndex = null);
                     if (kDebugMode) print(e);
                     connection?.dispose();
-                    ErrorHandler.handleError(context, ClientFailure('error', 'Error connecting to device'));
+                    ErrorHandler.handleError(context,
+                        ClientFailure('error', 'Error connecting to device'));
                   }
                 },
               ),
@@ -230,6 +241,33 @@ class _ConnectPageState extends State<ConnectPage> {
           NavigationPage.routeName,
           (route) => false,
         );
+
+        // @TODO: Replace with empty vehicle data when Bluetooth OBD2 connect feature is done.
+        Map<String, dynamic> vehicle = {
+          'vin': '1NXBR32E85Z505904',
+          'status': 'Connected',
+          'name': 'Toyota Prius',
+          'description': '2005 Base',
+          'transmission': 'Auto',
+          'numSeats': 5,
+          'errors': 2,
+          'fuelConsumed': 70,
+          'totalFuel': 100,
+          'speed': 68,
+          'rpm': 2731,
+          'battery': 84,
+          'oil': 59,
+          'coolantCurrent': 90,
+          'coolantDesired': 120,
+        };
+
+        // Create empty Vehicles collection for user
+        FirebaseFirestore.instance
+            .collection('Users')
+            .doc(user?.uid)
+            .collection('Vehicles')
+            .doc(vehicle['vin'])
+            .set(vehicle);
       },
     );
   }
