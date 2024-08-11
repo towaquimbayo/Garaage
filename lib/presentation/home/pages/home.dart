@@ -1,3 +1,4 @@
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -43,12 +44,27 @@ class _HomePageState extends State<HomePage> {
       final userVehiclesData = userVehicles.docs.map((e) => e.data()).toList();
 
       if (userVehiclesData.isNotEmpty) {
+        final vehicleData = userVehiclesData[0] as Map<String, dynamic>;
+
+        final cars = FirebaseStorage.instance.ref().child('cars');
+        final ref = cars.child('toyota').child('prius').child('2005').child('toyota-prius-2005-hybrid_hb-millennium_silver_metallic.png');
+        final networkImageURL = await ref.getDownloadURL();
+        
         setState(() {
-          vehicle = userVehiclesData[0] as Map<String, dynamic>;
-          // @TODO: Remove this when image is stored in Firestore
-          vehicle['image'] = Image.asset(
-            AppImages.toyotaPrius,
+          vehicle = vehicleData;
+          vehicle['image'] = Image.network(
+            networkImageURL,
             fit: BoxFit.contain,
+            loadingBuilder: (context, child, loadingProgress) {
+              if (loadingProgress == null) return child;
+              return const Center(child: CircularProgressIndicator());
+            },
+            errorBuilder: (context, error, stackTrace) {
+              return Image.asset(
+                AppImages.toyotaPrius,
+                fit: BoxFit.contain,
+              );
+            },
           );
         });
       }
