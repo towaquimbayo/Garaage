@@ -542,13 +542,8 @@ class ErrorCodePanel extends StatelessWidget {
                       const SizedBox(width: 10),
                       TextButton(
                         onPressed: () async {
-                          if (await canLaunchUrl(Uri.parse(part['link']))) {
-                            await launchUrl(
-                              part['link'],
-                              mode: LaunchMode.inAppBrowserView,
-                              browserConfiguration:
-                                  const BrowserConfiguration(showTitle: true),
-                            );
+                          if (!await launchUrl(Uri.parse(part['link']))) {
+                            throw Exception('Could not launch ${part['link']}');
                           }
                         },
                         child: Row(
