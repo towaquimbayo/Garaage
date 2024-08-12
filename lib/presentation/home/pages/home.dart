@@ -33,46 +33,13 @@ class _HomePageState extends State<HomePage> {
     final vehicleData = context.read<VehicleCubit>().state;
     if (vehicleData == null) {
       final user = FirebaseAuth.instance.currentUser;
-      if (user?.uid != null) fetchVehicleData(user!.uid);
-    }
-  }
-
-  // Fetch vehicle data from Firestore using the user ID
-  Future<void> fetchVehicleData(String userId) async {
-    try {
-      QuerySnapshot userVehicles = await FirebaseFirestore.instance
-          .collection('Users')
-          .doc(userId)
-          .collection('Vehicles')
-          .get();
-      final userVehiclesData = userVehicles.docs.map((e) => e.data()).toList();
-
-      if (userVehiclesData.isNotEmpty) {
-        final vehicleData = userVehiclesData[0] as Map<String, dynamic>;
-
-        final cars = FirebaseStorage.instance.ref().child('cars');
-        final ref = cars.child('toyota').child('prius').child('2005').child('toyota-prius-2005-hybrid_hb-millennium_silver_metallic.png');
-        final networkImageURL = await ref.getDownloadURL();
-        
-        vehicleData['image'] = Image.network(
-          networkImageURL,
-          fit: BoxFit.contain,
-          loadingBuilder: (context, child, loadingProgress) {
-            if (loadingProgress == null) return child;
-            return const Center(child: CircularProgressIndicator());
-          },
-          errorBuilder: (context, error, stackTrace) {
-            return Image.asset(
-              AppImages.sampleVehicle,
-              fit: BoxFit.contain,
-            );
-          },
-        );
-
-        context.read<VehicleCubit>().emit(vehicleData);
+      if (user?.uid != null) {
+        try {
+          context.read<VehicleCubit>().fetchVehicleData(user!.uid);
+        } catch (e) {
+          ErrorHandler.handleError(context, e.toString());
+        }
       }
-    } catch (e) {
-      ErrorHandler.handleError(context, e.toString());
     }
   }
 
@@ -119,7 +86,20 @@ class _HomePageState extends State<HomePage> {
                       VehicleCard(
                         name: vehicle['name'] as String,
                         description: vehicle['description'] as String,
-                        image: vehicle['image'] as Widget? ?? Image.asset(AppImages.sampleVehicle),
+                        image: Image.network(
+                          vehicle['image'] as String,
+                          fit: BoxFit.contain,
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return const Center(child: CircularProgressIndicator());
+                          },
+                          errorBuilder: (context, error, stackTrace) {
+                            return Image.asset(
+                              AppImages.sampleVehicle,
+                              fit: BoxFit.contain,
+                            );
+                          },
+                        ),
                         errors: vehicle['errors'] as int,
                         transmission: vehicle['transmission'] as String,
                         numSeats: vehicle['numSeats'] as int,

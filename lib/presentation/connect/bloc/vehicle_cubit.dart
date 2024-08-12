@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class VehicleCubit extends Cubit<Map<String, dynamic>?> {
@@ -20,7 +22,29 @@ class VehicleCubit extends Cubit<Map<String, dynamic>?> {
       'oil': 59,
       'coolantCurrent': 90,
       'coolantDesired': 120,
+      'image': ''
     });
+  }
+
+  Future<void> fetchVehicleData(String userId) async {
+    QuerySnapshot userVehicles = await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(userId)
+        .collection('Vehicles')
+        .get();
+    final userVehiclesData = userVehicles.docs.map((e) => e.data()).toList();
+
+    if (userVehiclesData.isNotEmpty) {
+      final vehicleData = userVehiclesData[0] as Map<String, dynamic>;
+
+      final cars = FirebaseStorage.instance.ref().child('cars');
+      final ref = cars.child('toyota').child('prius').child('2005').child('toyota-prius-2005-hybrid_hb-millennium_silver_metallic.png');
+      final networkImageURL = await ref.getDownloadURL();
+      
+      vehicleData['image'] = networkImageURL;
+
+      emit(vehicleData);
+    }
   }
 
   void clearVehicle() {
