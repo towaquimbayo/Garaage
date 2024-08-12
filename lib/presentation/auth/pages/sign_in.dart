@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../common/widgets/my_app_bar.dart';
@@ -15,6 +16,7 @@ import '../../../domain/usecases/auth/sign_in_with_google.dart';
 import '../../../service_locator.dart';
 import '../../connect/pages/connect.dart';
 import '../../navigation/pages/navigation.dart';
+import '../bloc/auth_cubit.dart';
 import 'register.dart';
 
 class SignInPage extends StatelessWidget {
@@ -28,71 +30,80 @@ class SignInPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: MyAppBar(
-        leading: true,
-        title: SvgPicture.asset(
-          AppVectors.logo,
-          colorFilter: const ColorFilter.mode(
-            AppColors.primary,
-            BlendMode.srcIn,
+    return BlocBuilder<AuthCubit, AuthState>(
+      builder: (context, state) {
+        _email.text = state.email;
+        _password.text = state.password;
+        
+        return Scaffold(
+          appBar: MyAppBar(
+            leading: true,
+            title: SvgPicture.asset(
+              AppVectors.logo,
+              colorFilter: const ColorFilter.mode(
+                AppColors.primary,
+                BlendMode.srcIn,
+              ),
+              height: 24,
+            )
           ),
-          height: 24,
-        )
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 24),
-            _signInText(),
-            const SizedBox(height: 24),
-            _emailField(context),
-            const SizedBox(height: 16),
-            _passwordField(context),
-            const SizedBox(height: 24),
-            MyButton(
-              type: 'primary',
-              text: 'Sign In',
-              onPressed: () async {
-                var result = await sl<SignInUseCase>().call(
-                  params: SignInUserReq(
-                    email: _email.text.toString(),
-                    password: _password.text.toString(),
-                  ),
-                );
-                result.fold(
-                  (l) => ErrorHandler.handleError(context, l),
-                  (r) async {
-                    var hasCarResult = await sl<CheckUserHasCarsUseCase>().call();
-                    hasCarResult.fold(
-                      (hasCars) {
-                        if (hasCars) {
-                          Navigator.of(context).pushNamedAndRemoveUntil(
-                            NavigationPage.routeName,
-                            (route) => false,
-                          );
-                        } else {
-                          Navigator.of(context).pushNamedAndRemoveUntil(
-                            ConnectPage.routeName,
-                            (route) => false,
-                          );
-                        }
+          body: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 24),
+                _signInText(),
+                const SizedBox(height: 24),
+                _emailField(context),
+                const SizedBox(height: 16),
+                _passwordField(context),
+                const SizedBox(height: 24),
+                MyButton(
+                  type: 'primary',
+                  text: 'Sign In',
+                  onPressed: () async {
+                    var result = await sl<SignInUseCase>().call(
+                      params: SignInUserReq(
+                        email: _email.text.toString(),
+                        password: _password.text.toString(),
+                      ),
+                    );
+                    result.fold(
+                      (l) => ErrorHandler.handleError(context, l),
+                      (r) async {
+                        context.read<AuthCubit>().setCredentials(_email.text, _password.text);
+                        
+                        var hasCarResult = await sl<CheckUserHasCarsUseCase>().call();
+                        hasCarResult.fold(
+                          (hasCars) {
+                            if (hasCars) {
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                NavigationPage.routeName,
+                                (route) => false,
+                              );
+                            } else {
+                              Navigator.of(context).pushNamedAndRemoveUntil(
+                                ConnectPage.routeName,
+                                (route) => false,
+                              );
+                            }
+                          },
+                          (error) => ErrorHandler.handleError(context, error),
+                        );
                       },
-                      (error) => ErrorHandler.handleError(context, error),
                     );
                   },
-                );
-              },
+                ),
+                const SizedBox(height: 4),
+                _redirectText(context),
+                const SizedBox(height: 8),
+                _withGoogle(context),
+              ],
             ),
-            const SizedBox(height: 4),
-            _redirectText(context),
-            const SizedBox(height: 8),
-            _withGoogle(context),
-          ],
-        ),
-      ),
+          ),
+        );
+      }
     );
   }
 

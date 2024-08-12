@@ -10,6 +10,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'core/config/theme/app_theme.dart';
 import 'firebase_options.dart';
+import 'presentation/auth/bloc/auth_cubit.dart';
 import 'presentation/chatbot/bloc/chatbot_cubit.dart';
 import 'presentation/navigation/bloc/navigation_cubit.dart';
 import 'presentation/onboarding/pages/onboarding.dart';
@@ -63,6 +64,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<ProfileCubit>(
           create: (context) => ProfileCubit(),
+        ),
+        BlocProvider<AuthCubit>(
+          create: (BuildContext context) => AuthCubit(),
         ),
       ],
       child: BlocListener<SplashCubit, bool>(

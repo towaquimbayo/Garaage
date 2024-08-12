@@ -79,8 +79,7 @@ class _ConnectPageState extends State<ConnectPage> {
       _adapterState = adapterState;
     });
 
-    if (_adapterState == BluetoothAdapterState.on)
-      _flutterBlueClassicPlugin.startScan();
+    if (_adapterState == BluetoothAdapterState.on) _flutterBlueClassicPlugin.startScan();
   }
 
   @override
@@ -220,8 +219,7 @@ class _ConnectPageState extends State<ConnectPage> {
                     if (mounted) setState(() => _connectingToIndex = null);
                     if (kDebugMode) print(e);
                     connection?.dispose();
-                    ErrorHandler.handleError(context,
-                        ClientFailure('error', 'Error connecting to device'));
+                    ErrorHandler.handleError(context, ClientFailure('error', 'Error connecting to device'));
                   }
                 },
               ),

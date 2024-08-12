@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../common/widgets/my_app_bar.dart';
@@ -16,6 +17,7 @@ import '../../../domain/usecases/auth/sign_in_with_google.dart';
 import '../../../service_locator.dart';
 import '../../connect/pages/connect.dart';
 import '../../navigation/pages/navigation.dart';
+import '../bloc/auth_cubit.dart';
 import 'sign_in.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -83,6 +85,8 @@ class RegisterPage extends StatelessWidget {
                 result.fold(
                   (l) => ErrorHandler.handleError(context, l),
                   (r) async {
+                    context.read<AuthCubit>().setCredentials(_email.text, _password.text);
+
                     var hasCarResult = await sl<CheckUserHasCarsUseCase>().call();
                     hasCarResult.fold(
                       (hasCars) {
