@@ -15,7 +15,7 @@ class ARIdentifyPage extends StatelessWidget {
         backgroundColor: Colors.transparent,
       ),
       body: Center(
-        child: Text('Welcome to the AR Identify Page'),
+        child: Text('AR Identify Page is under construction.'),
       ),
     );
   }
