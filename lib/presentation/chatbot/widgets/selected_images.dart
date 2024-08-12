@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../../core/config/assets/app_icons.dart';
 import '../../../core/config/theme/app_colors.dart';
 
+/// A stateless widget that displays a list of selected images with an option to remove them.
 class SelectedImages extends StatelessWidget {
   SelectedImages({
     Key? key,
@@ -17,10 +18,16 @@ class SelectedImages extends StatelessWidget {
   })  : _pickedImages = pickedImages,
         super(key: key);
 
+  /// Height of the container displaying the images.
   final double size;
+
+  /// List of picked images to display.
   final List<XFile?> _pickedImages;
+
+  /// Callback function to remove an image at a given index.
   final Function(int) removeImage;
 
+  /// Loads the images as a list of byte arrays.
   Future<List<Uint8List>> _loadImages() async {
     return await Future.wait(
       _pickedImages.where((file) => file != null).map((file) async {
@@ -36,8 +43,10 @@ class SelectedImages extends StatelessWidget {
       future: _loadImages(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
+          // Show a progress indicator while images are loading.
           return Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
+          // Show an error message if there was a problem loading the images.
           return Center(child: Text('Error loading images'));
         } else {
           final selectedImages = snapshot.data!;
@@ -58,6 +67,7 @@ class SelectedImages extends StatelessWidget {
                     ),
                     key: UniqueKey(),
                     onDismissed: (direction) {
+                      // Remove the image when it is dismissed.
                       removeImage(index);
                     },
                     child: Stack(
@@ -75,6 +85,7 @@ class SelectedImages extends StatelessWidget {
                           width: 15,
                           child: GestureDetector(
                             onTap: () {
+                              // Remove the image when the close button is tapped.
                               removeImage(index);
                             },
                             child: SvgPicture.asset(
