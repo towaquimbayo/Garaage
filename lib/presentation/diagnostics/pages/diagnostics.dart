@@ -175,8 +175,7 @@ class _DiagnosticsPageState extends State<DiagnosticsPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     ErrorCodeDropdown(
-                      errorCodes: DiagnosticsPage.errorCodes
-                          as List<Map<String, Object>>,
+                      errorCodes: DiagnosticsPage.errorCodes,
                       selectedError: selectedError,
                       onChanged: _updateSelectedError,
                     ),
@@ -330,9 +329,9 @@ class LastUpdated extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      padding: const EdgeInsets.fromLTRB(12, 8, 8, 8),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(16),
         color: AppColors.surface,
       ),
       child: Column(
@@ -444,7 +443,7 @@ class ErrorCodePanel extends StatelessWidget {
           initiallyExpanded: true,
           shape: const Border(
             bottom: BorderSide(
-              color: Color(0xFFA1A1A1),
+              color: AppColors.lightGrayMedium,
               width: 0.5,
             ),
           ),
@@ -464,7 +463,7 @@ class ErrorCodePanel extends StatelessWidget {
           ),
           shape: const Border(
             bottom: BorderSide(
-              color: Color(0xFFA1A1A1),
+              color: AppColors.lightGrayMedium,
               width: 0.5,
             ),
           ),
@@ -490,7 +489,7 @@ class ErrorCodePanel extends StatelessWidget {
           ),
           shape: const Border(
             bottom: BorderSide(
-              color: Color(0xFFA1A1A1),
+              color: AppColors.lightGrayMedium,
               width: 0.5,
             ),
           ),
@@ -520,7 +519,7 @@ class ErrorCodePanel extends StatelessWidget {
           ),
           shape: const Border(
             bottom: BorderSide(
-              color: Color(0xFFA1A1A1),
+              color: AppColors.lightGrayMedium,
               width: 0.5,
             ),
           ),

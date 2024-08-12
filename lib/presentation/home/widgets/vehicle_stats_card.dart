@@ -31,12 +31,9 @@ class VehicleStatsCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(24),
       ),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 5,
-        vertical: 10,
-      ),
+      padding: const EdgeInsets.fromLTRB(4, 10, 4, 4),
       child: Column(
         children: [
           Row(

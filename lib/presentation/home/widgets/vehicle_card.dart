@@ -27,125 +27,140 @@ class VehicleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 0,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      name,
-                      style: AppText.headH3.copyWith(
-                        color: AppColors.headingText,
-                      ),
-                    ),
-                    Text(
-                      description,
-                      style: AppText.bodyS.copyWith(
-                        color: AppColors.bodyText,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(width: 20),
-                Expanded(child: image),
-              ],
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Card(
+          margin: const EdgeInsets.only(top: 20),
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(24),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 16, 8, 8),
+            child: Column(
               children: [
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SvgPicture.asset(
-                          AppIcons.broken['transmission']!,
-                          width: 18,
-                          colorFilter: const ColorFilter.mode(
-                            AppColors.darkGrayLightest,
-                            BlendMode.srcIn,
+                        Text(
+                          name,
+                          style: AppText.headH3.copyWith(
+                            color: AppColors.headingText,
                           ),
                         ),
-                        const SizedBox(width: 10),
                         Text(
-                          transmission,
+                          description,
                           style: AppText.bodyS.copyWith(
-                            color: AppColors.darkGrayLightest,
-                            fontWeight: FontWeight.bold,
+                            color: AppColors.bodyText,
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(width: 15),
-                    Row(
-                      children: [
-                        SvgPicture.asset(
-                          AppIcons.broken['people']!,
-                          width: 18,
-                          colorFilter: const ColorFilter.mode(
-                            AppColors.darkGrayLightest,
-                            BlendMode.srcIn,
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Text(
-                          '$numSeats Seats',
-                          style: AppText.bodyS.copyWith(
-                            color: AppColors.darkGrayLightest,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    )
                   ],
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: status == 'Disconnected'
-                        ? AppColors.lightGrayMedium
-                        : errors > 0
-                            ? Colors.red[100]
-                            : Colors.green[50],
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 15,
-                    vertical: 10,
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.circle,
-                        color: status == 'Disconnected'
-                            ? AppColors.darkGrayLightest
-                            : errors > 0
-                                ? Colors.red
-                                : Colors.green,
-                        size: 10,
-                      ),
-                      const SizedBox(width: 10),
-                      Text(
-                        status == 'Disconnected' ? status : '$errors Errors',
-                        style: AppText.bodyS.copyWith(
-                          color: AppColors.bodyText,
-                          fontWeight: FontWeight.bold,
+                const SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Row(
+                          children: [
+                            SvgPicture.asset(
+                              AppIcons.broken['transmission']!,
+                              width: 18,
+                              colorFilter: const ColorFilter.mode(
+                                AppColors.darkGrayLightest,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              transmission,
+                              style: AppText.bodyS.copyWith(
+                                color: AppColors.darkGrayLightest,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
+                        const SizedBox(width: 15),
+                        Row(
+                          children: [
+                            SvgPicture.asset(
+                              AppIcons.broken['people']!,
+                              width: 18,
+                              colorFilter: const ColorFilter.mode(
+                                AppColors.darkGrayLightest,
+                                BlendMode.srcIn,
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              '$numSeats Seats',
+                              style: AppText.bodyS.copyWith(
+                                color: AppColors.darkGrayLightest,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: status == 'Disconnected'
+                            ? AppColors.lightGrayMedium
+                            : errors > 0
+                                ? AppColors.errorLight
+                                : AppColors.successLight,
+                        borderRadius: BorderRadius.circular(50),
                       ),
-                    ],
-                  ),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.circle,
+                            color: status == 'Disconnected'
+                                ? AppColors.darkGrayLightest
+                                : errors > 0
+                                    ? AppColors.errorDark
+                                    : AppColors.successDark,
+                            size: 10,
+                          ),
+                          const SizedBox(width: 10),
+                          Text(
+                            status == 'Disconnected' ? status : '$errors Errors',
+                            style: AppText.bodyS.copyWith(
+                              color: AppColors.bodyText,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-          ],
+          ),
         ),
-      ),
+        Positioned(
+          bottom: 52,
+          right: 8,
+          child: SizedBox(
+            width: 150,
+            child: image,
+          ),
+        ),
+      ],
     );
   }
 }
