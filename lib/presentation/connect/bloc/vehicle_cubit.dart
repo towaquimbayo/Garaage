@@ -22,7 +22,11 @@ class VehicleCubit extends Cubit<Map<String, dynamic>?> {
       'oil': 59,
       'coolantCurrent': 90,
       'coolantDesired': 120,
-      'image': ''
+      'image': '',
+      'errorCodes': [
+        'P0128',
+        'P0420',
+      ],
     });
   }
 
