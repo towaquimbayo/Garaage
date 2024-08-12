@@ -6,15 +6,18 @@ import '../../../core/config/assets/app_icons.dart';
 import '../../../core/config/theme/app_colors.dart';
 import '../bloc/chatbot_cubit.dart';
 
+/// A stateless widget that represents a button for starting a new chat.
 class NewChat extends StatelessWidget {
   const NewChat({super.key});
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
+      // When the button is pressed, it triggers the startNewChat method in ChatbotCubit.
       onPressed: () => context.read<ChatbotCubit>().startNewChat(),
       icon: Container(
         decoration: const BoxDecoration(
+          // Sets the background color and shape for the button.
           color: AppColors.primaryDarkest,
           shape: BoxShape.rectangle,
           borderRadius: BorderRadius.all(
