@@ -19,6 +19,8 @@ _Check out the Figma high fidelity prototype designs [_here_](https://www.figma.
 * [Usage](#usage)
   * [Prerequisites](#prerequisites)
   * [Installation](#installation)
+  * [Environment Variables Setup](#environment-variables-setup)
+  * [Firebase Google Sign In Setup (Optional)](#firebase-google-sign-in-setup)
   * [Run The App](#run-the-app)
 * [Features](#features)
   * [User Authentication and Management](#user-authentication-and-management)
@@ -111,6 +113,39 @@ _Check out the Figma high fidelity prototype designs [_here_](https://www.figma.
   ```
 
 3. Generate a new Google Gemini API key by following the instructions provided in the [Google Gemini API documentation](https://ai.google.dev/gemini-api/docs/api-key) and add the API key to your .env file.
+
+</details>
+
+<details>
+  <summary>Environment Variables Setup</summary>
+
+### Environment Variables Setup
+
+For the project to run correctly, environment variable for Google Gemini API is required. Rename the `.env.example` to `.env`. Sign up for a Google Gemini API key by following the instructions provided in the [Google Gemini API documentation](https://ai.google.dev/gemini-api/docs/api-key) and add the API key to your `.env` file.
+
+```sh
+GOOGLE_GEMINI_API_KEY=YOUR_GOOGLE_GEMINI_API_KEY
+```
+
+</details>
+
+<details>
+  <summary>Firebase Google Sign In Setup (Optional)</summary>
+
+### Firebase Google Sign In Setup
+
+1. Create a new Firebase project in the [Firebase Console](https://console.firebase.google.com/).
+2. Add an Android app to your Firebase project and follow the setup instructions to download the `google-services.json` file.
+3. Add the `google-services.json` file to the `android/app` directory of your Flutter project.
+4. Generate your SHA-1 key using the following command in the terminal:
+
+```sh
+cd android
+./gradlew signingReport
+```
+
+5. Add the SHA-1 key to your Firebase project in the Firebase Console.
+6. Enable Google Sign In in the Firebase Authentication settings.
 
 </details>
 
