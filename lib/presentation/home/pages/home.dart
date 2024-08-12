@@ -11,6 +11,7 @@ import '../../../core/config/theme/app_colors.dart';
 import '../../../core/config/theme/app_text.dart';
 import '../../../core/error/error_handler.dart';
 import '../../../domain/entities/user.dart';
+import '../../connect/bloc/vehicle_cubit.dart';
 import '../../profile/bloc/profile_cubit.dart';
 import '../widgets/fuel_consumption_card.dart';
 import '../widgets/vehicle_card.dart';
@@ -29,8 +30,11 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    final user = FirebaseAuth.instance.currentUser;
-    if (user?.uid != null) fetchVehicleData(user!.uid);
+    final vehicleData = context.read<VehicleCubit>().state;
+    if (vehicleData == null) {
+      final user = FirebaseAuth.instance.currentUser;
+      if (user?.uid != null) fetchVehicleData(user!.uid);
+    }
   }
 
   // Fetch vehicle data from Firestore using the user ID
@@ -50,23 +54,22 @@ class _HomePageState extends State<HomePage> {
         final ref = cars.child('toyota').child('prius').child('2005').child('toyota-prius-2005-hybrid_hb-millennium_silver_metallic.png');
         final networkImageURL = await ref.getDownloadURL();
         
-        setState(() {
-          vehicle = vehicleData;
-          vehicle['image'] = Image.network(
-            networkImageURL,
-            fit: BoxFit.contain,
-            loadingBuilder: (context, child, loadingProgress) {
-              if (loadingProgress == null) return child;
-              return const Center(child: CircularProgressIndicator());
-            },
-            errorBuilder: (context, error, stackTrace) {
-              return Image.asset(
-                AppImages.toyotaPrius,
-                fit: BoxFit.contain,
-              );
-            },
-          );
-        });
+        vehicleData['image'] = Image.network(
+          networkImageURL,
+          fit: BoxFit.contain,
+          loadingBuilder: (context, child, loadingProgress) {
+            if (loadingProgress == null) return child;
+            return const Center(child: CircularProgressIndicator());
+          },
+          errorBuilder: (context, error, stackTrace) {
+            return Image.asset(
+              AppImages.sampleVehicle,
+              fit: BoxFit.contain,
+            );
+          },
+        );
+
+        context.read<VehicleCubit>().emit(vehicleData);
       }
     } catch (e) {
       ErrorHandler.handleError(context, e.toString());
@@ -104,91 +107,96 @@ class _HomePageState extends State<HomePage> {
           },
         ),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 15),
-        child: vehicle.isEmpty
-            ? const Center(child: Text('Hmm... No vehicle data found'))
-            : Column(
-                children: [
-                  VehicleCard(
-                    name: vehicle['name'] as String,
-                    description: vehicle['description'] as String,
-                    image: vehicle['image'] as Widget,
-                    errors: vehicle['errors'] as int,
-                    transmission: vehicle['transmission'] as String,
-                    numSeats: vehicle['numSeats'] as int,
-                    status: vehicle['status'] as String,
-                  ),
-                  const SizedBox(height: 10),
-                  FuelConsumptionCard(
-                    currentConsumed: vehicle['status'] == 'Disconnected'
-                        ? 0
-                        : vehicle['fuelConsumed'] as int,
-                    totalConsumed: vehicle['totalFuel'] as int,
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: BlocBuilder<VehicleCubit, Map<String, dynamic>?>(
+        builder: (context, vehicleState) {
+          final vehicle = vehicleState ?? {};
+          return SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: vehicle.isEmpty
+                ? const Center(child: Text('Hmm... No vehicle data found'))
+                : Column(
                     children: [
-                      Expanded(
-                        flex: 4,
-                        child: VehicleStatsCard(
-                          value: vehicle['speed'] as int,
-                          icon: AppIcons.broken['speed']!,
-                          mainLabel: 'Speed',
-                          subLabel: 'km/h',
-                        ),
+                      VehicleCard(
+                        name: vehicle['name'] as String,
+                        description: vehicle['description'] as String,
+                        image: vehicle['image'] as Widget? ?? Image.asset(AppImages.sampleVehicle),
+                        errors: vehicle['errors'] as int,
+                        transmission: vehicle['transmission'] as String,
+                        numSeats: vehicle['numSeats'] as int,
+                        status: vehicle['status'] as String,
                       ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        flex: 6,
-                        child: VehicleStatsCard(
-                          value: vehicle['rpm'] as int,
-                          icon: AppIcons.broken['rpm']!,
-                          mainLabel: 'Engine RPM',
-                          fixAlignment: true,
-                        ),
+                      const SizedBox(height: 10),
+                      FuelConsumptionCard(
+                        currentConsumed: vehicle['status'] == 'Disconnected'
+                            ? 0
+                            : vehicle['fuelConsumed'] as int,
+                        totalConsumed: vehicle['totalFuel'] as int,
                       ),
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            flex: 4,
+                            child: VehicleStatsCard(
+                              value: vehicle['speed'] as int,
+                              icon: AppIcons.broken['speed']!,
+                              mainLabel: 'Speed',
+                              subLabel: 'km/h',
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            flex: 6,
+                            child: VehicleStatsCard(
+                              value: vehicle['rpm'] as int,
+                              icon: AppIcons.broken['rpm']!,
+                              mainLabel: 'Engine RPM',
+                              fixAlignment: true,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            flex: 6,
+                            child: VehicleStatsCard(
+                              value: vehicle['battery'] as int,
+                              icon: AppIcons.broken['battery']!,
+                              mainLabel: 'Car Battery',
+                              postfix: '%',
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            flex: 4,
+                            child: VehicleStatsCard(
+                              value: vehicle['oil'] as int,
+                              icon: AppIcons.broken['drop']!,
+                              mainLabel: 'Oil',
+                              postfix: '%',
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      VehicleStatsCard(
+                        value: vehicle['coolantCurrent'] as int,
+                        valueAlt: vehicle['coolantDesired'] as int,
+                        icon: AppIcons.broken['coolant']!,
+                        mainLabel: 'Coolant Temp',
+                        subLabel: 'current',
+                        subLabelAlt: 'desired',
+                        postfix: '°C',
+                      ),
+                      const SizedBox(height: 20),
                     ],
                   ),
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        flex: 6,
-                        child: VehicleStatsCard(
-                          value: vehicle['battery'] as int,
-                          icon: AppIcons.broken['battery']!,
-                          mainLabel: 'Car Battery',
-                          postfix: '%',
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        flex: 4,
-                        child: VehicleStatsCard(
-                          value: vehicle['oil'] as int,
-                          icon: AppIcons.broken['drop']!,
-                          mainLabel: 'Oil',
-                          postfix: '%',
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 10),
-                  VehicleStatsCard(
-                    value: vehicle['coolantCurrent'] as int,
-                    valueAlt: vehicle['coolantDesired'] as int,
-                    icon: AppIcons.broken['coolant']!,
-                    mainLabel: 'Coolant Temp',
-                    subLabel: 'current',
-                    subLabelAlt: 'desired',
-                    postfix: '°C',
-                  ),
-                  const SizedBox(height: 20),
-                ],
-              ),
+          );
+        },
       ),
     );
   }

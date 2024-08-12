@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_blue_classic/flutter_blue_classic.dart';
 
@@ -15,6 +15,7 @@ import '../../../core/config/theme/app_text.dart';
 import '../../../core/error/error_handler.dart';
 import '../../../core/error/failures.dart';
 import '../../navigation/pages/navigation.dart';
+import '../bloc/vehicle_cubit.dart';
 
 class ConnectPage extends StatefulWidget {
   static String routeName = '/connect';
@@ -61,12 +62,10 @@ class _ConnectPageState extends State<ConnectPage> {
           }
         }
       });
-      _scanSubscription =
-          _flutterBlueClassicPlugin.scanResults.listen((device) {
+      _scanSubscription = _flutterBlueClassicPlugin.scanResults.listen((device) {
         if (mounted) setState(() => _scanResults.add(device));
       });
-      _scanningStateSubscription =
-          _flutterBlueClassicPlugin.isScanning.listen((isScanning) {
+      _scanningStateSubscription = _flutterBlueClassicPlugin.isScanning.listen((isScanning) {
         if (mounted) setState(() => _isScanning = isScanning);
       });
     } catch (e) {
@@ -231,41 +230,19 @@ class _ConnectPageState extends State<ConnectPage> {
   }
 
   Widget _continueWithSampleData() {
-    return MyButton(
-      type: 'secondary',
-      text: 'Continue with Sample Data Instead',
-      onPressed: () {
-        Navigator.of(context).pushNamedAndRemoveUntil(
-          NavigationPage.routeName,
-          (route) => false,
+    return BlocBuilder<VehicleCubit, Map<String, dynamic>?>(
+      builder: (context, vehicleState) {
+        return MyButton(
+          type: 'secondary',
+          text: 'Continue with Sample Data Instead',
+          onPressed: () {
+            context.read<VehicleCubit>().addSampleVehicle();
+            Navigator.of(context).pushNamedAndRemoveUntil(
+              NavigationPage.routeName,
+              (route) => false,
+            );
+          },
         );
-
-        // @TODO: Replace with empty vehicle data when Bluetooth OBD2 connect feature is done.
-        Map<String, dynamic> vehicle = {
-          'vin': '1NXBR32E85Z505904',
-          'status': 'Connected',
-          'name': 'Toyota Prius',
-          'description': '2005 Base',
-          'transmission': 'Auto',
-          'numSeats': 5,
-          'errors': 2,
-          'fuelConsumed': 70,
-          'totalFuel': 100,
-          'speed': 68,
-          'rpm': 2731,
-          'battery': 84,
-          'oil': 59,
-          'coolantCurrent': 90,
-          'coolantDesired': 120,
-        };
-
-        // Create empty Vehicles collection for user
-        FirebaseFirestore.instance
-            .collection('Users')
-            .doc(user?.uid)
-            .collection('Vehicles')
-            .doc(vehicle['vin'])
-            .set(vehicle);
       },
     );
   }

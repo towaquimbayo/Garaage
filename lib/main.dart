@@ -12,6 +12,7 @@ import 'core/config/theme/app_theme.dart';
 import 'firebase_options.dart';
 import 'presentation/auth/bloc/auth_cubit.dart';
 import 'presentation/chatbot/bloc/chatbot_cubit.dart';
+import 'presentation/connect/bloc/vehicle_cubit.dart';
 import 'presentation/navigation/bloc/navigation_cubit.dart';
 import 'presentation/onboarding/pages/onboarding.dart';
 import 'presentation/profile/bloc/profile_cubit.dart';
@@ -67,6 +68,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<AuthCubit>(
           create: (BuildContext context) => AuthCubit(),
+        ),
+        BlocProvider<VehicleCubit>(
+          create: (BuildContext context) => VehicleCubit(),
         ),
       ],
       child: BlocListener<SplashCubit, bool>(
