@@ -6,7 +6,7 @@
 
 A mobile application built using Flutter, Google Gemini API, and Google ARCore, aimed at transforming vehicle diagnostics and maintenance. By leveraging an OBD2 (On-board diagnostics) scanner, the app offers comprehensive diagnostic reports and maintenance suggestions, enabling users to effectively monitor their vehicle's health. This project was created for the Google Gemini API Developer Competition 2024, demonstrating the integration of cutting-edge Google technologies.
 
-_Check out the Figma high fidelity prototype designs [_here_](https://www.figma.com/design/YdUcQaqNCCKZ5ZTA5HZhlf/garaage?node-id=1-2&t=5zR3jATXVg4i26S8-1)._
+_Check out the Figma high fidelity prototype designs [_here_](https://www.figma.com/design/YdUcQaqNCCKZ5ZTA5HZhlf/garaage?node-id=1-2&t=5zR3jATXVg4i26S8-1) and watch our pitch video [_here_](https://youtu.be/Y85shubvky4?si=xPZP078KL42boZAp)._
 
 > [!IMPORTANT]
 > Please note that the app requires an OBD2 scanner to connect to your vehicle and retrieve real-time diagnostic information. Also, the AI model is currently trained for a limited number of vehicles and may not support all vehicle models.
